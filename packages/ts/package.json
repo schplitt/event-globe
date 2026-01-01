@@ -1,0 +1,51 @@
+{
+  "name": "@event-globe/ts",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Managed renderer for Three.js globe visualization with automatic resizing and controls",
+  "keywords": [
+    "globe",
+    "three",
+    "threejs",
+    "3d",
+    "visualization",
+    "renderer"
+  ],
+  "license": "MIT",
+  "author": "schplitt",
+  "homepage": "https://github.com/schplitt/event-globe/tree/main/packages/ts#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/schplitt/event-globe.git",
+    "directory": "packages/ts"
+  },
+  "bugs": {
+    "url": "https://github.com/schplitt/event-globe/issues"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@event-globe/core": "workspace:*",
+    "three": "catalog:"
+  },
+  "devDependencies": {
+    "@types/three": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:"
+  }
+}

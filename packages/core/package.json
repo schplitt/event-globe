@@ -1,0 +1,55 @@
+{
+  "name": "@event-globe/core",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Core EventGlobe component for framework-agnostic globe visualizations",
+  "keywords": [
+    "globe",
+    "three",
+    "threejs",
+    "3d",
+    "visualization",
+    "h3",
+    "geospatial"
+  ],
+  "license": "MIT",
+  "author": "schplitt",
+  "homepage": "https://github.com/schplitt/event-globe/tree/main/packages/core#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/schplitt/event-globe.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/schplitt/event-globe/issues"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "h3-js": "catalog:",
+    "three-conic-polygon-geometry": "catalog:"
+  },
+  "devDependencies": {
+    "@types/three": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "three": "catalog:"
+  }
+}

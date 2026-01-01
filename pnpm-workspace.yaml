@@ -1,0 +1,52 @@
+catalogMode: prefer
+
+shellEmulator: true
+
+trustPolicy: no-downgrade
+
+trustPolicyExclude:
+  - '@typescript-eslint/eslint-plugin@8.51.0'
+  - 'chokidar@4.0.3'
+  - '@typescript-eslint/typescript-estree@8.51.0'
+
+packages:
+  - packages/*
+  - playgrounds/*
+
+catalog:
+  '@schplitt/eslint-config': ^1.2.0
+  '@sveltejs/vite-plugin-svelte': ^6.2.1
+  '@tsconfig/svelte': ^5.0.6
+  '@types/node': ^24.10.1
+  '@types/react': ^19.2.7
+  '@types/react-dom': ^19.2.3
+  '@types/three': ^0.182.0
+  '@vitejs/plugin-react': ^5.1.1
+  '@vitejs/plugin-vue': ^6.0.1
+  '@vue/tsconfig': ^0.8.1
+  bumpp: ^10.3.2
+  eslint: ^9.39.2
+  globals: ^16.5.0
+  h3-js: ^4.4.0
+  react: ^19.2.3
+  react-dom: ^19.2.0
+  rollup-plugin-svelte: ^7.2.3
+  solid-js: ^1.9.10
+  svelte: ^5.46.1
+  svelte-check: ^4.3.5
+  svelte-preprocess: ^6.0.3
+  three: ^0.182.0
+  three-conic-polygon-geometry: ^2.1.2
+  tsdown: ^0.18.3
+  typescript: ^5.9.3
+  typescript-eslint: ^8.46.4
+  unplugin-solid: ^1.0.0
+  unplugin-vue: ^7.1.0
+  vite: ^7.3.0
+  vite-plugin-solid: ^2.11.10
+  vue: ^3.5.24
+  vue-tsc: ^3.2.1
+
+onlyBuiltDependencies:
+  - esbuild
+  - svelte-preprocess

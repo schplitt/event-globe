@@ -1,0 +1,41 @@
+{
+  "name": "@event-globe/monorepo",
+  "version": "0.0.0",
+  "type": "module",
+  "packageManager": "pnpm@10.26.2",
+  "description": "Framework-agnostic 3D globe visualization library with Three.js",
+  "keywords": [
+    "globe",
+    "three",
+    "threejs",
+    "3d",
+    "visualization",
+    "geospatial",
+    "h3",
+    "react",
+    "vue",
+    "svelte",
+    "solid"
+  ],
+  "license": "MIT",
+  "author": "schplitt",
+  "homepage": "https://github.com/schplitt/event-globe#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/schplitt/event-globe.git"
+  },
+  "bugs": {
+    "url": "https://github.com/schplitt/event-globe/issues"
+  },
+  "scripts": {
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "prerelease": "eslint && pnpm --filter './packages/*' typecheck && pnpm --filter './packages/*' build",
+    "release": "bumpp"
+  },
+  "devDependencies": {
+    "@schplitt/eslint-config": "catalog:",
+    "bumpp": "catalog:",
+    "eslint": "catalog:"
+  }
+}

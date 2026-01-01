@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    /* Linting */
+    "strict": true,
+    "allowImportingTsExtensions": true,
+    "module": "ESNext",
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "noUncheckedSideEffectImports": true,
+    "types": ["vite/client"],
+    "noEmit": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+
+    "lib": [ "DOM", "DOM.Iterable","ES2022"],
+    "moduleDetection": "force",
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "skipLibCheck": true
+  },
+  "include": ["src"]
+}
