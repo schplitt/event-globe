@@ -1,6 +1,6 @@
 {
   "name": "@event-globe/ts",
-  "version": "0.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "Managed renderer for Three.js globe visualization with automatic resizing and controls",
   "keywords": [

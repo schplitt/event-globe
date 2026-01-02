@@ -1,6 +1,6 @@
 {
   "name": "@event-globe/core",
-  "version": "0.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "Core EventGlobe component for framework-agnostic globe visualizations",
   "keywords": [

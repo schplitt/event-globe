@@ -1,6 +1,6 @@
 {
   "name": "@event-globe/monorepo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "packageManager": "pnpm@10.26.2",
   "description": "Framework-agnostic 3D globe visualization library with Three.js",
