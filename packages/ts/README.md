@@ -5,7 +5,7 @@ Managed renderer for Three.js globe visualization with automatic resizing and co
 ## Installation
 
 ```sh
-npm install @event-globe/ts three
+npm install @event-globe/ts
 ```
 
 ## Usage
