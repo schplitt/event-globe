@@ -6,6 +6,12 @@ settings:
 
 catalogs:
   default:
+    '@angular/core':
+      specifier: ^21.0.0
+      version: 21.2.1
+    '@oxc-angular/vite':
+      specifier: ^0.0.10
+      version: 0.0.10
     '@schplitt/eslint-config':
       specifier: ^1.3.1
       version: 1.3.1
@@ -116,6 +122,31 @@ importers:
       eslint:
         specifier: 'catalog:'
         version: 9.39.2(jiti@2.6.1)
+
+  packages/angular:
+    dependencies:
+      '@event-globe/ts':
+        specifier: workspace:*
+        version: link:../ts
+    devDependencies:
+      '@angular/core':
+        specifier: 'catalog:'
+        version: 21.2.1(rxjs@7.8.2)
+      '@oxc-angular/vite':
+        specifier: 'catalog:'
+        version: 0.0.10(vite@7.3.1(@types/node@24.10.7)(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.8.2))
+      '@types/three':
+        specifier: 'catalog:'
+        version: 0.183.1
+      tsdown:
+        specifier: 'catalog:'
+        version: 0.21.0(synckit@0.11.11)(typescript@5.9.3)(vue-tsc@3.2.5(typescript@5.9.3))
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vite:
+        specifier: 'catalog:'
+        version: 7.3.1(@types/node@24.10.7)(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.8.2)
 
   packages/core:
     dependencies:
@@ -515,6 +546,19 @@ packages:
     resolution: {integrity: sha512-L4uKhC3KorF04x9A7noff2m25Phkq54wdqzuWNnbGg3bNfOHdXMv97t2e02J1mk+XOeEcPfDJmOiXj4fcviCLA==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0, npm: ^6.11.0 || ^7.5.6 || >=8.0.0, yarn: '>= 1.13.0'}
     hasBin: true
+
+  '@angular/core@21.2.1':
+    resolution: {integrity: sha512-pFTbg03s2ZI5cHNT+eWsGjwIIKiYkeAnodFbCAHjwFi9KCEYlTykFLjr9lcpGrBddfmAH7GE08Q73vgmsdcNHw==}
+    engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
+    peerDependencies:
+      '@angular/compiler': 21.2.1
+      rxjs: ^6.5.3 || ^7.4.0
+      zone.js: ~0.15.0 || ~0.16.0
+    peerDependenciesMeta:
+      '@angular/compiler':
+        optional: true
+      zone.js:
+        optional: true
 
   '@babel/code-frame@7.27.1':
     resolution: {integrity: sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg==}
@@ -1061,14 +1105,6 @@ packages:
       '@types/node':
         optional: true
 
-  '@isaacs/balanced-match@4.0.1':
-    resolution: {integrity: sha512-yzMTt9lEb8Gv7zRioUilSglI0c0smZ9k5D65677DLWLtWJaXIS3CqcGyUFByYKlnUj6TkjLVs54fBl6+TiGQDQ==}
-    engines: {node: 20 || >=22}
-
-  '@isaacs/brace-expansion@5.0.0':
-    resolution: {integrity: sha512-ZT55BDLV0yv0RBm2czMiZ+SqCGO7AvmOM3G/w2xhVPH+te0aKgFjmBvGlL1dH+ql2tgGO3MVrbb3jCKyvpgnxA==}
-    engines: {node: 20 || >=22}
-
   '@isaacs/fs-minipass@4.0.1':
     resolution: {integrity: sha512-wgm9Ehl2jpeqP3zw/7mo3kRHFp5MEDhqAdwy1fTGkHAwnkGOVsgpvQhL8B5n1qlb01jV3n/bI0ZfZp5lWA1k4w==}
     engines: {node: '>=18.0.0'}
@@ -1149,6 +1185,55 @@ packages:
   '@npmcli/run-script@10.0.3':
     resolution: {integrity: sha512-ER2N6itRkzWbbtVmZ9WKaWxVlKlOeBFF1/7xx+KA5J1xKa4JjUwBdb6tDpk0v1qA+d+VDwHI9qmLcXSWcmi+Rw==}
     engines: {node: ^20.17.0 || >=22.9.0}
+
+  '@oxc-angular/binding-darwin-arm64@0.0.10':
+    resolution: {integrity: sha512-iKLlJa25QTOyDGBViKEP1+/FjpdjsahZN7xtCGIOYFnqKY5pam01NmTAoqgoVm0una2y8PASfu95qEz37MSCsA==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@oxc-angular/binding-darwin-x64@0.0.10':
+    resolution: {integrity: sha512-IJyYxMpf0KiObrksDfzyB64iTIipcLu55giDXOJIgz5IrNSgW74po0yGpCsDq7USLcTGecMUkmLo9H3W8ygcEQ==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@oxc-angular/binding-linux-arm64-gnu@0.0.10':
+    resolution: {integrity: sha512-HRVC1xUftXlYCHSATFhpAx4gT9yhQF33OYWluajQuPN+QldKs2l4qzgfEDP/iRiFuYlUbP7Pj7LvjuIVXyiZSg==}
+    cpu: [arm64]
+    os: [linux]
+    libc: [glibc]
+
+  '@oxc-angular/binding-linux-arm64-musl@0.0.10':
+    resolution: {integrity: sha512-XksIeCYCjhnAEusEB0ZIWB0ExUx5LkZYoe25Rjz5ID5D/NFRcffraXJYbR/iFqHyS3OVN3Z4V3fxG+NYpchcVg==}
+    cpu: [arm64]
+    os: [linux]
+    libc: [musl]
+
+  '@oxc-angular/binding-linux-x64-gnu@0.0.10':
+    resolution: {integrity: sha512-U3ms06BBIyIuLoonbnQ9y8X0nT7XH3kBZ1XJvWTR5qbq725Wwis8+StZzxEMzfZFFQoN4AJC6BI2pDC8t1vlEg==}
+    cpu: [x64]
+    os: [linux]
+    libc: [glibc]
+
+  '@oxc-angular/binding-linux-x64-musl@0.0.10':
+    resolution: {integrity: sha512-xFqhUNz2f2L3TJOzaAFwSBdlXUVwK7XS5aLcwdpavzFH2pmVGrGRtapd3AQkmHMY+2pq+jJuH4v2FZR2ygvWDA==}
+    cpu: [x64]
+    os: [linux]
+    libc: [musl]
+
+  '@oxc-angular/binding-win32-arm64-msvc@0.0.10':
+    resolution: {integrity: sha512-OLHGhF4IvF3R4NM4Aj8Vs/UvIHiN7U5O0ye6oF5/7wdPYePhoS1IzqEN/CLRDzTyewGzcU16UdPCEXHkJC3G6A==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@oxc-angular/binding-win32-x64-msvc@0.0.10':
+    resolution: {integrity: sha512-ThoSB1XffBqkW66z4n1WEQ5OLys4iCQ0PdjUW2qD10I1/jFAGknuArJzYG+6p2ahiUtV9AsX/Ar9T352cCfydQ==}
+    cpu: [x64]
+    os: [win32]
+
+  '@oxc-angular/vite@0.0.10':
+    resolution: {integrity: sha512-QloBKuANraIlFiq9XAPhkb7WeVpcxXgJUFh0R9mLYoZ9ArPSVjBrfSRgl4RfqxdY7Rrnt5hFU6SnW+uFvTBODg==}
+    peerDependencies:
+      vite: '>=8.0.0-beta.10'
 
   '@oxc-project/runtime@0.115.0':
     resolution: {integrity: sha512-Rg8Wlt5dCbXhQnsXPrkOjL1DTSvXLgb2R/KYfnf1/K+R0k6UMLEmbQXPM+kwrWqSmWA2t0B1EtHy2/3zikQpvQ==}
@@ -3252,10 +3337,6 @@ packages:
     resolution: {integrity: sha512-VP79XUPxV2CigYP3jWwAUFSku2aKqBH7uTAapFWCBqutsbmDo96KY5o8uh6U+/YSIn5OxJnXp73beVkpqMIGhA==}
     engines: {node: '>=18'}
 
-  minimatch@10.1.1:
-    resolution: {integrity: sha512-enIvLvRAFZYXJzkCYG5RKmPfrFArdLv+R+lbQ53BmIMLIry74bjKzX6iHAm8WYamJkhSSEabrWN5D97XnKObjQ==}
-    engines: {node: 20 || >=22}
-
   minimatch@10.2.4:
     resolution: {integrity: sha512-oRjTw/97aTBN0RHbYCdtF1MQfvusSIBQM0IZEgzl6426+8jSC0nF1a/GmnVLpfB9yyr6g6FTqWqiZVbxrtaCIg==}
     engines: {node: 18 || 20 || >=22}
@@ -4523,6 +4604,11 @@ snapshots:
       - chokidar
       - supports-color
 
+  '@angular/core@21.2.1(rxjs@7.8.2)':
+    dependencies:
+      rxjs: 7.8.2
+      tslib: 2.8.1
+
   '@babel/code-frame@7.27.1':
     dependencies:
       '@babel/helper-validator-identifier': 7.28.5
@@ -5071,12 +5157,6 @@ snapshots:
     optionalDependencies:
       '@types/node': 24.10.7
 
-  '@isaacs/balanced-match@4.0.1': {}
-
-  '@isaacs/brace-expansion@5.0.0':
-    dependencies:
-      '@isaacs/balanced-match': 4.0.1
-
   '@isaacs/fs-minipass@4.0.1':
     dependencies:
       minipass: 7.1.2
@@ -5146,7 +5226,7 @@ snapshots:
 
   '@npmcli/fs@5.0.0':
     dependencies:
-      semver: 7.7.3
+      semver: 7.7.4
 
   '@npmcli/git@7.0.1':
     dependencies:
@@ -5156,7 +5236,7 @@ snapshots:
       npm-pick-manifest: 11.0.3
       proc-log: 6.1.0
       promise-retry: 2.0.1
-      semver: 7.7.3
+      semver: 7.7.4
       which: 6.0.0
 
   '@npmcli/installed-package-contents@3.0.0':
@@ -5173,7 +5253,7 @@ snapshots:
       hosted-git-info: 9.0.2
       json-parse-even-better-errors: 5.0.0
       proc-log: 6.1.0
-      semver: 7.7.3
+      semver: 7.7.4
       validate-npm-package-license: 3.0.4
 
   '@npmcli/promise-spawn@8.0.3':
@@ -5196,6 +5276,44 @@ snapshots:
       which: 6.0.0
     transitivePeerDependencies:
       - supports-color
+
+  '@oxc-angular/binding-darwin-arm64@0.0.10':
+    optional: true
+
+  '@oxc-angular/binding-darwin-x64@0.0.10':
+    optional: true
+
+  '@oxc-angular/binding-linux-arm64-gnu@0.0.10':
+    optional: true
+
+  '@oxc-angular/binding-linux-arm64-musl@0.0.10':
+    optional: true
+
+  '@oxc-angular/binding-linux-x64-gnu@0.0.10':
+    optional: true
+
+  '@oxc-angular/binding-linux-x64-musl@0.0.10':
+    optional: true
+
+  '@oxc-angular/binding-win32-arm64-msvc@0.0.10':
+    optional: true
+
+  '@oxc-angular/binding-win32-x64-msvc@0.0.10':
+    optional: true
+
+  '@oxc-angular/vite@0.0.10(vite@7.3.1(@types/node@24.10.7)(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.8.2))':
+    dependencies:
+      obug: 2.1.1
+      vite: 7.3.1(@types/node@24.10.7)(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.8.2)
+    optionalDependencies:
+      '@oxc-angular/binding-darwin-arm64': 0.0.10
+      '@oxc-angular/binding-darwin-x64': 0.0.10
+      '@oxc-angular/binding-linux-arm64-gnu': 0.0.10
+      '@oxc-angular/binding-linux-arm64-musl': 0.0.10
+      '@oxc-angular/binding-linux-x64-gnu': 0.0.10
+      '@oxc-angular/binding-linux-x64-musl': 0.0.10
+      '@oxc-angular/binding-win32-arm64-msvc': 0.0.10
+      '@oxc-angular/binding-win32-x64-msvc': 0.0.10
 
   '@oxc-project/runtime@0.115.0': {}
 
@@ -5507,7 +5625,7 @@ snapshots:
   '@tufjs/models@4.1.0':
     dependencies:
       '@tufjs/canonical-json': 2.0.0
-      minimatch: 10.1.1
+      minimatch: 10.2.4
 
   '@turf/boolean-point-in-polygon@7.3.1':
     dependencies:
@@ -6888,7 +7006,7 @@ snapshots:
 
   glob@13.0.0:
     dependencies:
-      minimatch: 10.1.1
+      minimatch: 10.2.4
       minipass: 7.1.2
       path-scurry: 2.0.1
 
@@ -6963,7 +7081,7 @@ snapshots:
 
   ignore-walk@8.0.0:
     dependencies:
-      minimatch: 10.1.1
+      minimatch: 10.2.4
 
   ignore@5.3.2: {}
 
@@ -7544,10 +7662,6 @@ snapshots:
 
   mimic-function@5.0.1: {}
 
-  minimatch@10.1.1:
-    dependencies:
-      '@isaacs/brace-expansion': 5.0.0
-
   minimatch@10.2.4:
     dependencies:
       brace-expansion: 5.0.4
@@ -7618,7 +7732,7 @@ snapshots:
       make-fetch-happen: 15.0.3
       nopt: 9.0.0
       proc-log: 6.1.0
-      semver: 7.7.3
+      semver: 7.7.4
       tar: 7.5.2
       tinyglobby: 0.2.15
       which: 6.0.0
@@ -7637,7 +7751,7 @@ snapshots:
 
   npm-install-checks@8.0.0:
     dependencies:
-      semver: 7.7.3
+      semver: 7.7.4
 
   npm-normalize-package-bin@4.0.0: {}
 
@@ -7647,7 +7761,7 @@ snapshots:
     dependencies:
       hosted-git-info: 9.0.2
       proc-log: 5.0.0
-      semver: 7.7.3
+      semver: 7.7.4
       validate-npm-package-name: 6.0.2
 
   npm-packlist@10.0.3:
@@ -7660,7 +7774,7 @@ snapshots:
       npm-install-checks: 8.0.0
       npm-normalize-package-bin: 5.0.0
       npm-package-arg: 13.0.1
-      semver: 7.7.3
+      semver: 7.7.4
 
   npm-registry-fetch@19.1.1:
     dependencies:

@@ -1,0 +1,56 @@
+{
+  "name": "@event-globe/angular",
+  "version": "1.0.1",
+  "type": "module",
+  "description": "Angular component for Three.js globe visualization with automatic resizing and controls",
+  "keywords": [
+    "globe",
+    "three",
+    "threejs",
+    "3d",
+    "visualization",
+    "angular"
+  ],
+  "license": "MIT",
+  "author": "schplitt",
+  "homepage": "https://github.com/schplitt/event-globe/tree/main/packages/angular#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/schplitt/event-globe.git",
+    "directory": "packages/angular"
+  },
+  "bugs": {
+    "url": "https://github.com/schplitt/event-globe/issues"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@event-globe/ts": "workspace:*"
+  },
+  "devDependencies": {
+    "@angular/core": "catalog:",
+    "@oxc-angular/vite": "catalog:",
+    "@types/three": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  },
+  "peerDependencies": {
+    "@angular/core": "^21.0.0"
+  }
+}
