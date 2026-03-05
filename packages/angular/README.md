@@ -1,66 +1,87 @@
-# @event-globe/ts
+# @event-globe/angular
 
-Managed renderer for Three.js globe visualization with automatic resizing and controls.
+Angular component for the Event Globe 3D visualization library.
 
 ## Installation
 
 ```sh
-npm install @event-globe/ts
+npm install @event-globe/angular
 ```
 
 ## Usage
 
 ```ts
-import { EventGlobeRenderer } from '@event-globe/ts'
-import type { EventGlobeRendererConfig, ArcOptions } from '@event-globe/ts'
+import { Component, viewChild } from '@angular/core'
+import { EventGlobeComponent } from '@event-globe/angular'
+import type { EventGlobeRendererConfig, ArcOptions } from '@event-globe/angular'
 
-const container = document.getElementById('globe')
-const config: EventGlobeRendererConfig = {
-  autoRotate: true,
-  autoRotateSpeed: 0.3,
-  globe: {
-    globeColor: '#3a228a',
-    showLandPolygons: true,
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [EventGlobeComponent],
+  template: `
+    <div class="globe-container">
+      <event-globe #globe [config]="config" (arcRemoved)="onArcRemoved($event)" />
+      <button (click)="addRandomArc()">Add Arc</button>
+    </div>
+  `,
+  styles: [`
+    .globe-container {
+      width: 100%;
+      height: 600px;
+    }
+  `],
+})
+export class AppComponent {
+  readonly globeRef = viewChild.required(EventGlobeComponent)
+
+  readonly config: EventGlobeRendererConfig = {
+    autoRotate: true,
+    autoRotateSpeed: 0.3,
+    globe: {
+      globeColor: '#3a228a',
+      showLandPolygons: true,
+    },
+  }
+
+  addRandomArc() {
+    this.globeRef().addArc({
+      startLat: (Math.random() * 180) - 90,
+      startLng: (Math.random() * 360) - 180,
+      endLat: (Math.random() * 180) - 90,
+      endLng: (Math.random() * 360) - 180,
+      color: '#DD63AF',
+      showEndRing: true,
+    })
+  }
+
+  onArcRemoved(event: { id: number, options: ArcOptions }) {
+    console.log('Arc removed:', event.id)
   }
 }
-
-const renderer = new EventGlobeRenderer(container, config)
-
-function addRandomArc() {
-  renderer.addArc({
-    startLat: (Math.random() * 180) - 90,
-    startLng: (Math.random() * 360) - 180,
-    endLat: (Math.random() * 180) - 90,
-    endLng: (Math.random() * 360) - 180,
-    color: '#DD63AF',
-    showEndRing: true,
-  })
-}
-
-// Cleanup when done
-renderer.destroy()
 ```
 
 ## API
 
-### Configuration
+### Inputs
 
-The `EventGlobeRenderer` accepts a configuration object with the following options:
+- `config?: EventGlobeRendererConfig` - Configuration options for the globe
 
-| Option                 | Type          | Default                                                  | Description                                         |
-| ---------------------- | ------------- | -------------------------------------------------------- | --------------------------------------------------- |
-| `autoRotate`           | `boolean`     | `true`                                                   | Enable automatic rotation of the globe              |
-| `autoRotateSpeed`      | `number`      | `0.3`                                                    | Speed of auto-rotation                              |
-| `manualRotate`         | `boolean`     | `true`                                                   | Allow manual rotation with mouse/touch              |
-| `sceneBackgroundColor` | `number`      | `0xffffff`                                               | Background color of the Three.js scene (hex number) |
-| `sceneFogColor`        | `number`      | `0x535ef3`                                               | Fog color for depth effect (hex number)             |
-| `sceneFogNear`         | `number`      | `400`                                                    | Distance where fog starts                           |
-| `sceneFogFar`          | `number`      | `2000`                                                   | Distance where fog is fully opaque                  |
-| `globe`                | `GlobeConfig` | see [@event-globe/core](../core/README.md#configuration) | Globe configuration options                         |
+### Outputs
 
-For complete API documentation and configuration options, see the [@event-globe/core](../core/README.md) package.
+- `(arcRemoved)` - Emitted when an arc is removed. Payload: `{ id: number, options: ArcOptions }`
 
-### Methods
+### Component Methods
+
+Access these methods via a `viewChild` ref:
+
+```ts
+readonly globeRef = viewChild.required(EventGlobeComponent)
+
+// Access methods
+this.globeRef().addArc({ ... })
+this.globeRef().getActiveArcCount()
+```
 
 #### `addArc(options: ArcOptions): number`
 
@@ -78,17 +99,9 @@ Remove a specific arc by its ID.
 
 Remove all arcs from the globe.
 
-#### `onArcRemoved(callback: (id: number, options: ArcOptions) => void): void`
+## Full API Reference
 
-Set a callback to be invoked when an arc is removed (either manually or automatically after animation completes).
-
-#### `updateConfig(config: EventGlobeRendererConfig): void`
-
-Update the renderer configuration.
-
-#### `destroy(): void`
-
-Clean up the renderer and dispose of Three.js resources.
+For complete configurations and options, see the [@event-globe/core](../core/README.md) and [@event-globe/ts](../ts/README.md#configuration) packages.
 
 ## License
 
