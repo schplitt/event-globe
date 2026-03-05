@@ -27,5 +27,11 @@
     "useDefineForClassFields": false,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+    "strictInjectionParameters": true,
+    "strictStandalone": true,
+    "enableI18nLegacyMessageIdFormat": false,
   }
 }
