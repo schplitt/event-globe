@@ -76,10 +76,10 @@ export class AppComponent {
 Access these methods via a `viewChild` ref:
 
 ```ts
-readonly globeRef = viewChild.required(EventGlobeComponent)
+globeRef = viewChild.required(EventGlobeComponent)
 
 // Access methods
-this.globeRef().addArc({ ... })
+this.globeRef().addArc({ /* ... */ })
 this.globeRef().getActiveArcCount()
 ```
 
