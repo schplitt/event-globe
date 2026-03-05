@@ -6,10 +6,10 @@ export default defineConfig({
   entry: {
     index: './src/index.ts',
   },
-  target: ['es2020'],
+  target: ['es2024'],
   clean: true,
   dts: true,
-  platform: 'neutral',
+  platform: 'browser',
   outDir: './dist',
   plugins: [
     svelte(
