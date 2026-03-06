@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "noUncheckedSideEffectImports": true,
+    "types": ["node"],
+    "noEmit": true,
+    "lib": ["ES2023"],
+    "moduleDetection": "force"
+  },
+  "include": ["vite.config.ts"]
+}

@@ -22,35 +22,26 @@
   "bugs": {
     "url": "https://github.com/schplitt/event-globe/issues"
   },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
-  },
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsdown",
-    "dev": "tsdown --watch",
+    "build": "ng-packagr -p ng-package.json",
+    "build:tsdown": "tsdown",
+    "dev": "ng-packagr -p ng-package.json --watch",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {
-    "@event-globe/ts": "workspace:*"
-  },
   "devDependencies": {
+    "@angular/compiler": "catalog:",
+    "@angular/compiler-cli": "catalog:",
     "@angular/core": "catalog:",
-    "@oxc-angular/vite": "catalog:",
     "@types/three": "catalog:",
-    "tsdown": "catalog:",
-    "typescript": "catalog:",
-    "vite": "catalog:"
+    "ng-packagr": "catalog:",
+    "tslib": "catalog:",
+    "typescript": "catalog:"
   },
   "peerDependencies": {
-    "@angular/core": "^21.0.0"
+    "@angular/core": "^21.0.0",
+    "@event-globe/ts": "workspace:*"
   }
 }

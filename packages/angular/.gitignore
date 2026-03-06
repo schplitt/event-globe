@@ -1,0 +1,3 @@
+# Kept locally for experimental testing — not committed to the repo.
+# Will be removed once ng-packagr is replaced with tsdown.
+tsdown.config.ts

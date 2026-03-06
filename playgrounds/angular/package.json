@@ -1,0 +1,22 @@
+{
+  "name": "angular",
+  "version": "1.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@event-globe/angular": "workspace:*",
+    "@angular/core": "catalog:",
+    "@angular/common": "catalog:",
+    "@angular/platform-browser": "catalog:"
+  },
+  "devDependencies": {
+    "@oxc-angular/vite": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}

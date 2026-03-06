@@ -2,8 +2,6 @@
   "compilerOptions": {
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
-    "noPropertyAccessFromIndexSignature": false,
-    "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
 
@@ -11,27 +9,22 @@
     "strictNullChecks": true,
     "module": "esnext",
     "moduleResolution": "bundler",
-    "noUncheckedSideEffectImports": true,
 
     "resolveJsonModule": true,
     "declaration": true,
-    "noEmit": true,
     "esModuleInterop": true,
-    "isolatedModules": true,
-    "verbatimModuleSyntax": true,
 
     "experimentalDecorators": true,
     "lib": ["DOM", "ESNext"],
-    "moduleDetection": "force",
     "target": "esnext",
     "useDefineForClassFields": false,
-    "skipDefaultLibCheck": true,
-    "skipLibCheck": true,
+    "skipLibCheck": true
   },
   "angularCompilerOptions": {
     "strictTemplates": true,
     "strictInjectionParameters": true,
     "strictStandalone": true,
     "enableI18nLegacyMessageIdFormat": false,
+    "compilationMode": "partial"
   }
 }
