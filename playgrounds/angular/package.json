@@ -8,10 +8,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@event-globe/angular": "workspace:*",
-    "@angular/core": "catalog:",
     "@angular/common": "catalog:",
-    "@angular/platform-browser": "catalog:"
+    "@angular/core": "catalog:",
+    "@angular/platform-browser": "catalog:",
+    "@event-globe/angular": "workspace:*"
   },
   "devDependencies": {
     "@oxc-angular/vite": "catalog:",
