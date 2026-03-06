@@ -1,0 +1,58 @@
+{
+  "name": "@event-globe/angular",
+  "version": "1.0.1",
+  "type": "module",
+  "description": "Angular component for Three.js globe visualization with automatic resizing and controls",
+  "keywords": [
+    "globe",
+    "three",
+    "threejs",
+    "3d",
+    "visualization",
+    "angular"
+  ],
+  "license": "MIT",
+  "author": "schplitt",
+  "homepage": "https://github.com/schplitt/event-globe/tree/main/packages/angular#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/schplitt/event-globe.git",
+    "directory": "packages/angular"
+  },
+  "bugs": {
+    "url": "https://github.com/schplitt/event-globe/issues"
+  },
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/types/event-globe-angular.d.ts",
+      "default": "./dist/fesm2022/event-globe-angular.mjs"
+    }
+  },
+  "module": "./dist/fesm2022/event-globe-angular.mjs",
+  "typings": "./dist/types/event-globe-angular.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "ng-packagr -p ng-package.json",
+    "build:tsdown": "tsdown",
+    "dev": "ng-packagr -p ng-package.json --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@event-globe/ts": "workspace:*"
+  },
+  "devDependencies": {
+    "@angular/compiler": "catalog:",
+    "@angular/compiler-cli": "catalog:",
+    "@angular/core": "catalog:",
+    "@types/three": "catalog:",
+    "ng-packagr": "catalog:",
+    "tslib": "catalog:",
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "@angular/core": "^21.0.0"
+  }
+}

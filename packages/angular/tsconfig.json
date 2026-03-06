@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    "strict": true,
+    "strictNullChecks": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+
+    "resolveJsonModule": true,
+    "declaration": true,
+    "esModuleInterop": true,
+
+    "experimentalDecorators": true,
+    "lib": ["DOM", "ESNext"],
+    "target": "esnext",
+    "useDefineForClassFields": false,
+    "skipLibCheck": true
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+    "strictInjectionParameters": true,
+    "strictStandalone": true,
+    "enableI18nLegacyMessageIdFormat": false,
+    "compilationMode": "partial"
+  }
+}

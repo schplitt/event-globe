@@ -31,7 +31,8 @@
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "prerelease": "eslint && pnpm --filter './packages/*' typecheck && pnpm --filter './packages/*' build",
-    "release": "bumpp -r"
+    "release": "bumpp -r",
+    "build": "pnpm --filter './packages/*' build"
   },
   "devDependencies": {
     "@schplitt/eslint-config": "catalog:",
