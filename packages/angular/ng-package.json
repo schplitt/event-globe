@@ -3,5 +3,6 @@
   "lib": {
     "entryFile": "src/index.ts"
   },
+  "allowedNonPeerDependencies": ["@event-globe/ts"],
   "dest": "dist"
 }

@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, viewChild } from '@angular/core'
+import type { OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, viewChild } from '@angular/core'
 import { EventGlobeComponent } from '@event-globe/angular'
 import type { ArcOptions } from '@event-globe/angular'
 

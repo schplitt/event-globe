@@ -22,6 +22,15 @@
   "bugs": {
     "url": "https://github.com/schplitt/event-globe/issues"
   },
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/types/event-globe-angular.d.ts",
+      "default": "./dist/fesm2022/event-globe-angular.mjs"
+    }
+  },
+  "module": "./dist/fesm2022/event-globe-angular.mjs",
+  "typings": "./dist/types/event-globe-angular.d.ts",
   "files": [
     "dist"
   ],
@@ -30,6 +39,9 @@
     "build:tsdown": "tsdown",
     "dev": "ng-packagr -p ng-package.json --watch",
     "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@event-globe/ts": "workspace:*"
   },
   "devDependencies": {
     "@angular/compiler": "catalog:",
@@ -41,7 +53,6 @@
     "typescript": "catalog:"
   },
   "peerDependencies": {
-    "@angular/core": "^21.0.0",
-    "@event-globe/ts": "workspace:*"
+    "@angular/core": "^21.0.0"
   }
 }
