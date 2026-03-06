@@ -5,6 +5,7 @@ export default defineConfig({
     index: './src/index.ts',
   },
   target: ['es2024'],
+  format: 'esm',
   clean: true,
   dts: true,
   platform: 'browser',
