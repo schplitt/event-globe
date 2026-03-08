@@ -26,8 +26,8 @@ function App() {
         showEndRipple: true,
       })
 
-      event?.finished.then((result) => {
-        console.log('Event finished:', result)
+      event?.removed.then((result) => {
+        console.log('Event removed:', { event: event.event, ...result })
       })
 
       console.log('Added random event:', { lat, lng, endLat, endLng, color })

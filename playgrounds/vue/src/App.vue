@@ -1,9 +1,9 @@
 <script setup lang="ts">
 /* eslint-disable no-console */
-import { ref, onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, useTemplateRef } from 'vue'
 import EventGlobe from '@event-globe/vue'
 
-const globeRef = ref<any>(null)
+const globeRef = useTemplateRef("globeRef")
 let interval: number | null = null
 
 onMounted(() => {
@@ -26,8 +26,12 @@ onMounted(() => {
       showEndRipple: true,
     })
 
-    void event?.finished.then((result: unknown) => {
-      console.log('Event finished:', result)
+    event?.removed.then((result) => {
+      console.log('Event removed:', {
+        event: event.event,
+        reason: result.reason,
+        options: result.options,
+      })
     })
 
     console.log('Added random event:', { lat, lng, endLat, endLng, color })

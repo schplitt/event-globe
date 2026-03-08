@@ -2,6 +2,7 @@
   /* eslint-disable no-console */
   import { onMount } from 'svelte'
   import EventGlobe from '@event-globe/svelte'
+  import type { GlobeEventResult } from '@event-globe/svelte'
 
   let globeRef: any
 
@@ -25,8 +26,12 @@
         showEndRipple: true,
       })
 
-      void event?.finished.then((result: unknown) => {
-        console.log('Event finished:', result)
+      void event?.removed.then((result: GlobeEventResult<'arc'>) => {
+        console.log('Event removed:', {
+          event: event.event,
+          reason: result.reason,
+          options: result.options,
+        })
       })
 
       console.log('Added random event:', { lat, lng, endLat, endLng, color })

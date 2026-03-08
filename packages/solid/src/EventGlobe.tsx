@@ -1,6 +1,6 @@
 import { onMount, onCleanup, createEffect } from 'solid-js'
 import { EventGlobeRenderer } from '@event-globe/ts'
-import type { EventGlobeRendererConfig, ArcOptions, EventHandle, GlobeEventOptions } from '@event-globe/ts'
+import type { EventGlobeRendererConfig, ArcOptions, GlobeEventLifecycle, GlobeEventOptions } from '@event-globe/ts'
 
 interface EventGlobeProps {
   config?: EventGlobeRendererConfig
@@ -11,7 +11,7 @@ interface EventGlobeProps {
 }
 
 export interface EventGlobeRef {
-  addEvent: (options: GlobeEventOptions) => EventHandle<'arc'> | undefined
+  addEvent: (options: GlobeEventOptions) => GlobeEventLifecycle<'arc'> | undefined
   addArc: (options: ArcOptions) => number
   getActiveArcCount: () => number
   removeArcById: (id: number) => void

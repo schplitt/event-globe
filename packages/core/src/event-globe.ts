@@ -27,8 +27,7 @@ import { GlowMesh } from './GlowMesh'
 import type {
   ArcEventOptions,
   ArcOptions,
-  EventHandle,
-  GlobeEventFinishReason,
+  GlobeEventLifecycle,
   GlobeEventOptions,
   GlobeEventResult,
 } from './types'
@@ -188,7 +187,7 @@ interface ActiveArc {
   startRipplePhase: 'growing' | 'shrinking' | 'done'
   endRipplePhase: 'waiting' | 'growing' | 'shrinking' | 'done'
   phase: 'waiting' | 'animating' | 'completed' | 'removing'
-  resolveFinished: (result: GlobeEventResult<'arc'>) => void
+  resolveRemoved: (result: GlobeEventResult<'arc'>) => void
 }
 
 /**
@@ -410,12 +409,12 @@ export class EventGlobe extends Group {
    * Add an event to the globe and receive a handle for completion and removal.
    *
    * @param {GlobeEventOptions} options - Event configuration options
-   * @returns {EventHandle<'arc'>} - Handle for awaiting completion or removing the event
+   * @returns {GlobeEventLifecycle<'arc'>} - Lifecycle for awaiting removal or removing the event
    */
-  public addEvent(options: GlobeEventOptions): EventHandle<'arc'> {
+  public addEvent(options: GlobeEventOptions): GlobeEventLifecycle<'arc'> {
     switch (options.event) {
       case 'arc':
-        return this.#addArcEvent(options).handle
+        return this.#addArcEvent(options).lifecycle
     }
   }
 
@@ -694,17 +693,17 @@ export class EventGlobe extends Group {
    * Remove and finalize an active arc.
    *
    * @param {number} id - Internal arc identifier.
-   * @param {GlobeEventFinishReason} reason - Why the event finished.
+   * @param {'completed' | 'removed'} reason - Why the event was removed.
    * @returns {void}
    */
-  #removeActiveArc(id: number, reason: GlobeEventFinishReason): void {
+  #removeActiveArc(id: number, reason: 'completed' | 'removed'): void {
     const arc = this.#activeArcs.get(id)
     if (!arc)
       return
 
     this.#disposeArc(arc)
     this.#activeArcs.delete(id)
-    arc.resolveFinished({ event: 'arc', reason, options: arc.options })
+    arc.resolveRemoved({ reason, options: arc.options })
 
     if (this.#onArcRemovedCallback) {
       this.#onArcRemovedCallback(id, arc.options)
@@ -715,9 +714,9 @@ export class EventGlobe extends Group {
    * Add a normalized arc event to the scene.
    *
    * @param {ArcEventOptions} options - Normalized arc event options.
-   * @returns {{ id: number, handle: EventHandle<'arc'> }} - Internal id and public event handle.
+   * @returns {{ id: number, lifecycle: GlobeEventLifecycle<'arc'> }} - Internal id and public event lifecycle.
    */
-  #addArcEvent(options: ArcEventOptions): { id: number, handle: EventHandle<'arc'> } {
+  #addArcEvent(options: ArcEventOptions): { id: number, lifecycle: GlobeEventLifecycle<'arc'> } {
     const id = ++this.#arcIdCounter
     const opts = {
       ...this.#defaultArcEventOptions,
@@ -806,9 +805,9 @@ export class EventGlobe extends Group {
       this.#pointsGroup.add(endRipple)
     }
 
-    let resolveFinished!: (result: GlobeEventResult<'arc'>) => void
-    const finished = new Promise<GlobeEventResult<'arc'>>((resolve) => {
-      resolveFinished = resolve
+    let resolveRemoved!: (result: GlobeEventResult<'arc'>) => void
+    const removed = new Promise<GlobeEventResult<'arc'>>((resolve) => {
+      resolveRemoved = resolve
     })
 
     const activeArc: ActiveArc = {
@@ -830,15 +829,16 @@ export class EventGlobe extends Group {
       startRipplePhase: 'growing',
       endRipplePhase: 'waiting',
       phase: startDelay > 0 ? 'waiting' : 'animating',
-      resolveFinished,
+      resolveRemoved,
     }
 
     this.#activeArcs.set(id, activeArc)
 
     return {
       id,
-      handle: {
-        finished,
+      lifecycle: {
+        event: 'arc',
+        removed,
         remove: () => {
           this.#removeActiveArc(id, 'removed')
         },

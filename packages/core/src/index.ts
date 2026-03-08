@@ -7,12 +7,11 @@ export type {
 
 export type {
   GlobeEventType,
-  GlobeEventFinishReason,
   GlobeEventOptionsMap,
   GlobeEvents,
   GlobeEventOptions,
   ArcEventOptions,
   GlobeEventResult,
-  EventHandle,
+  GlobeEventLifecycle,
   ArcOptions,
 } from './types'

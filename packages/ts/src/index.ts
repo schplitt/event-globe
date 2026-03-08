@@ -2,12 +2,11 @@ export * from './globe-renderer'
 export type {
   GlobeConfig,
   GlobeEventType,
-  GlobeEventFinishReason,
   GlobeEventOptionsMap,
   GlobeEvents,
   GlobeEventOptions,
   ArcEventOptions,
   GlobeEventResult,
-  EventHandle,
+  GlobeEventLifecycle,
   ArcOptions,
 } from '@event-globe/core'

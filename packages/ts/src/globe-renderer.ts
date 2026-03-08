@@ -9,7 +9,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { EventGlobe } from '@event-globe/core'
 import type {
   ArcOptions,
-  EventHandle,
+  GlobeEventLifecycle,
   GlobeConfig,
   GlobeEventOptions,
 } from '@event-globe/core'
@@ -257,9 +257,9 @@ export class EventGlobeRenderer {
    * Add an event to the globe
    *
    * @param options Event configuration options
-   * @returns Event handle for completion and early removal
+   * @returns Event lifecycle for removal and early removal
    */
-  public addEvent(options: GlobeEventOptions): EventHandle<'arc'> {
+  public addEvent(options: GlobeEventOptions): GlobeEventLifecycle<'arc'> {
     return this.globe.addEvent(options)
   }
 

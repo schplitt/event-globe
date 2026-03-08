@@ -84,9 +84,9 @@ export default function App() {
 }
 ```
 
-#### `addEvent(options: GlobeEventOptions): EventHandle<'arc'> | undefined`
+#### `addEvent(options: GlobeEventOptions): GlobeEventLifecycle<'arc'> | undefined`
 
-Add an event and receive a handle for awaiting completion or removing it early.
+Add an event and receive a lifecycle for awaiting removal or removing it early.
 
 #### `removeAllEvents(): void`
 

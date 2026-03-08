@@ -53,8 +53,8 @@ const event = globe.addEvent({
   showEndRipple: true,
 })
 
-event.finished.then((result) => {
-  console.log('Event finished:', result.reason)
+event.removed.then((result) => {
+  console.log('Event removed:', event.event, result.reason)
 })
 
 // In your render loop
@@ -117,30 +117,30 @@ Configuration options for core events. `GlobeEventOptions` is currently a union 
 | `flyingSegment`     | `boolean`           | `true`         | Show moving segment along the arc path                                        |
 | `segmentLength`     | `number`            | `0.15`         | Length of flying segment as fraction of total arc (0.0-1.0)                   |
 
-### EventHandle
+### GlobeEventLifecycle
 
-The new primary API returns a handle instead of an ID.
+The new primary API returns a lifecycle object instead of an ID.
 
-- `finished`: `Promise<GlobeEventResult<'arc'>>`. Resolves when the event has been removed.
+- `event`: `'arc'`. The event type for this lifecycle.
+- `removed`: `Promise<GlobeEventResult<'arc'>>`. Resolves when the event has been removed.
 - `remove()`: `() => void`. Removes the event early.
 
 ### EventResult
 
-`finished` resolves to a `GlobeEventResult<'arc'>`.
+`removed` resolves to a `GlobeEventResult<'arc'>`.
 
 | Property  | Type                       | Description                          |
 | --------- | -------------------------- | ------------------------------------ |
-| `event`   | `'arc'`                    | The event type                       |
-| `reason`  | `'completed' \| 'removed'` | How the event finished               |
+| `reason`  | `'completed' \| 'removed'` | Why the event was removed            |
 | `options` | `ArcEventOptions`          | The event options associated with it |
 
 ## API
 
 ### Methods
 
-#### `addEvent(options: GlobeEventOptions): EventHandle<'arc'>`
+#### `addEvent(options: GlobeEventOptions): GlobeEventLifecycle<'arc'>`
 
-Add an event and receive a handle for awaiting completion or removing it early.
+Add an event and receive a lifecycle for awaiting removal or removing it early.
 
 ```ts
 const event = globe.addEvent({
@@ -155,7 +155,7 @@ const event = globe.addEvent({
 })
 
 async function waitForEvent() {
-  await event.finished
+  await event.removed
 }
 ```
 
@@ -317,9 +317,9 @@ async function addTemporaryEvent(lat: number, lng: number, endLat: number, endLn
     event.remove()
   }, 3000)
 
-  const result = await event.finished
+  const result = await event.removed
   clearTimeout(timeout)
-  console.log(`Event ${result.reason}: ${result.options.lat},${result.options.lng} -> ${result.options.endLat},${result.options.endLng}`)
+  console.log(`Event ${event.event} ${result.reason}: ${result.options.lat},${result.options.lng} -> ${result.options.endLat},${result.options.endLng}`)
 }
 ```
 

@@ -1,7 +1,5 @@
 export type GlobeEventType = 'arc'
 
-export type GlobeEventFinishReason = 'completed' | 'removed'
-
 export interface GlobeEventOptionsMap extends Record<GlobeEventType, object> {
   arc: ArcEventOptions
 }
@@ -31,13 +29,13 @@ export type GlobeEvents = keyof GlobeEventOptionsMap
 export type GlobeEventOptions = GlobeEventOptionsMap[GlobeEvents]
 
 export interface GlobeEventResult<TGlobeEvent extends GlobeEvents> {
-  event: TGlobeEvent
-  reason: GlobeEventFinishReason
+  reason: 'completed' | 'removed'
   options: GlobeEventOptionsMap[TGlobeEvent]
 }
 
-export interface EventHandle<TGlobeEvent extends GlobeEvents> {
-  finished: Promise<GlobeEventResult<TGlobeEvent>>
+export interface GlobeEventLifecycle<TGlobeEvent extends GlobeEvents> {
+  event: TGlobeEvent
+  removed: Promise<GlobeEventResult<TGlobeEvent>>
   remove: () => void
 }
 

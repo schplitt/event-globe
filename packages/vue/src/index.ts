@@ -5,7 +5,7 @@ export type {
   GlobeEventOptions,
   ArcEventOptions,
   GlobeEventResult,
-  EventHandle,
+  GlobeEventLifecycle,
   ArcOptions,
   GlobeConfig,
 } from '@event-globe/ts'

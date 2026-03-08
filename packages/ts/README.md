@@ -63,9 +63,9 @@ For complete API documentation and configuration options, see the [@event-globe/
 
 ### Methods
 
-#### `addEvent(options: GlobeEventOptions): EventHandle<'arc'>`
+#### `addEvent(options: GlobeEventOptions): GlobeEventLifecycle<'arc'>`
 
-Add an event and receive a handle for awaiting completion or removing it early.
+Add an event and receive a lifecycle for awaiting removal or removing it early.
 
 #### `removeAllEvents(): void`
 
