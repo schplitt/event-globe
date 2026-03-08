@@ -675,6 +675,15 @@ export class EventGlobe extends Group {
     }
   }
 
+  /**
+   * Remove keys with undefined values before merging option objects.
+   *
+   * This preserves defaults when sparse deprecated arc options are normalized
+   * into the event-first shape.
+   *
+   * @param {T} options - Option object that may contain undefined values.
+   * @returns {Partial<T>} - Copy containing only explicitly defined values.
+   */
   #withDefinedOptions<T extends object>(options: T): Partial<T> {
     return Object.fromEntries(
       Object.entries(options).filter(([, value]) => value !== undefined),
