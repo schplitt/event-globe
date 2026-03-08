@@ -12,7 +12,7 @@ npm install @event-globe/ts
 
 ```ts
 import { EventGlobeRenderer } from '@event-globe/ts'
-import type { EventGlobeRendererConfig, ArcOptions } from '@event-globe/ts'
+import type { EventGlobeRendererConfig } from '@event-globe/ts'
 
 const container = document.getElementById('globe')
 const config: EventGlobeRendererConfig = {
@@ -26,14 +26,15 @@ const config: EventGlobeRendererConfig = {
 
 const renderer = new EventGlobeRenderer(container, config)
 
-function addRandomArc() {
-  renderer.addArc({
-    startLat: (Math.random() * 180) - 90,
-    startLng: (Math.random() * 360) - 180,
+function addRandomEvent() {
+  renderer.addEvent({
+    event: 'arc',
+    lat: (Math.random() * 180) - 90,
+    lng: (Math.random() * 360) - 180,
     endLat: (Math.random() * 180) - 90,
     endLng: (Math.random() * 360) - 180,
     color: '#DD63AF',
-    showEndRing: true,
+    showEndRipple: true,
   })
 }
 
@@ -62,13 +63,21 @@ For complete API documentation and configuration options, see the [@event-globe/
 
 ### Methods
 
+#### `addEvent(options: GlobeEventOptions): EventHandle<'arc'>`
+
+Add an event and receive a handle for awaiting completion or removing it early.
+
+#### `removeAllEvents(): void`
+
+Remove all active events from the globe.
+
 #### `addArc(options: ArcOptions): number`
 
-Add an animated arc between two coordinates. Returns the arc ID.
+Deprecated alias for `addEvent()`.
 
 #### `getActiveArcCount(): number`
 
-Get the current number of active arcs.
+Deprecated method that returns the current number of active arcs. It will be removed in a future release.
 
 #### `removeArcById(id: number): void`
 
@@ -76,7 +85,7 @@ Remove a specific arc by its ID.
 
 #### `clearAllArcs(): void`
 
-Remove all arcs from the globe.
+Deprecated alias for `removeAllEvents()`.
 
 #### `onArcRemoved(callback: (id: number, options: ArcOptions) => void): void`
 

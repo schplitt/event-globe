@@ -1,6 +1,6 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef } from 'react'
 import { EventGlobeRenderer } from '@event-globe/ts'
-import type { EventGlobeRendererConfig, ArcOptions } from '@event-globe/ts'
+import type { EventGlobeRendererConfig, ArcOptions, EventHandle, GlobeEventOptions } from '@event-globe/ts'
 import type { CSSProperties } from 'react'
 
 interface EventGlobeProps {
@@ -11,9 +11,11 @@ interface EventGlobeProps {
 }
 
 export interface EventGlobeRef {
+  addEvent: (options: GlobeEventOptions) => EventHandle<'arc'> | undefined
   addArc: (options: ArcOptions) => number
   getActiveArcCount: () => number
   removeArcById: (id: number) => void
+  removeAllEvents: () => void
   clearAllArcs: () => void
 }
 
@@ -53,6 +55,9 @@ export const EventGlobe = forwardRef<EventGlobeRef, EventGlobeProps>(
     }, [config])
 
     useImperativeHandle(ref, () => ({
+      addEvent: (options: GlobeEventOptions) => {
+        return rendererRef.current?.addEvent(options)
+      },
       addArc: (options: ArcOptions) => {
         return rendererRef.current?.addArc(options) ?? -1
       },
@@ -61,6 +66,9 @@ export const EventGlobe = forwardRef<EventGlobeRef, EventGlobeProps>(
       },
       removeArcById: (id: number) => {
         rendererRef.current?.removeArcById(id)
+      },
+      removeAllEvents: () => {
+        rendererRef.current?.removeAllEvents()
       },
       clearAllArcs: () => {
         rendererRef.current?.clearAllArcs()

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { EventGlobeRenderer } from '@event-globe/ts'
-import type { EventGlobeRendererConfig, ArcOptions } from '@event-globe/ts'
+import type { EventGlobeRendererConfig, ArcOptions, EventHandle, GlobeEventOptions } from '@event-globe/ts'
 
 interface Props {
   config?: EventGlobeRendererConfig
@@ -32,8 +32,12 @@ onUnmounted(() => {
   }
 })
 
-function addArc(options: ArcOptions): void {
-  renderer?.addArc(options)
+function addArc(options: ArcOptions): number | undefined {
+  return renderer?.addArc(options)
+}
+
+function addEvent(options: GlobeEventOptions): EventHandle<'arc'> | undefined {
+  return renderer?.addEvent(options)
 }
 
 function getActiveArcCount(): number {
@@ -49,9 +53,11 @@ watch(
 )
 
 defineExpose({
+  addEvent,
   addArc,
   getActiveArcCount,
   removeArcById: (id: number) => renderer?.removeArcById(id),
+  removeAllEvents: () => renderer?.removeAllEvents(),
   clearAllArcs: () => renderer?.clearAllArcs(),
 })
 </script>

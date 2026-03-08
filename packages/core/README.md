@@ -16,16 +16,16 @@ npm install @event-globe/core three
 - **Lighting system** - Ambient, directional, and point lights for realistic illumination
 - **Atmosphere** - Optional glow effect around the globe
 - **Land polygons** - H3 hexagon-based land mass visualization
-- **Animated arcs** - Flying arcs between coordinates with customizable animations
+- **Animated events** - Arc events between coordinates with customizable animations
 - **Point markers** - Optional start/end point indicators
-- **Ripple rings** - Animated expanding rings at arc endpoints
+- **Ripples** - Animated expanding ripple effects at arc endpoints
 
 ## Usage
 
 ```ts
 import { Scene, PerspectiveCamera, WebGLRenderer } from 'three'
 import { EventGlobe } from '@event-globe/core'
-import type { GlobeConfig, ArcOptions } from '@event-globe/core'
+import type { GlobeConfig } from '@event-globe/core'
 
 // Setup Three.js scene
 const scene = new Scene()
@@ -42,14 +42,19 @@ const config: GlobeConfig = {
 const globe = new EventGlobe(config)
 scene.add(globe)
 
-// Add an arc
-globe.addArc({
-  startLat: 40.7128,
-  startLng: -74.0060,
+// Add an event
+const event = globe.addEvent({
+  event: 'arc',
+  lat: 40.7128,
+  lng: -74.0060,
   endLat: 51.5074,
   endLng: -0.1278,
   color: '#DD63AF',
-  showEndRing: true,
+  showEndRipple: true,
+})
+
+event.finished.then((result) => {
+  console.log('Event finished:', result.reason)
 })
 
 // In your render loop
@@ -67,61 +72,108 @@ animate()
 
 Configuration options for the globe appearance and behavior:
 
-| Option               | Type      | Default                   | Description                                                    |
-| -------------------- | --------- | ------------------------- | -------------------------------------------------------------- |
-| `globeRadius`        | `number`  | `100`                     | Radius of the globe in Three.js units                          |
-| `globeColor`         | `string`  | `"#3a228a"`               | Main color of the globe surface (hex string)                   |
-| `emissive`           | `string`  | `"#220038"`               | Emissive (self-illumination) color (hex string)                |
-| `emissiveIntensity`  | `number`  | `0.1`                     | Intensity of the emissive color (0-1)                          |
-| `shininess`          | `number`  | `0.7`                     | Shininess of the globe surface material (0-100)                |
-| `showLandPolygons`   | `boolean` | `true`                    | Whether to show land masses as hexagon patterns                |
-| `landPolygonColor`   | `string`  | `"rgba(255,255,255,0.7)"` | Color for land polygon hexagons (hex or rgba string)           |
-| `landPolygonOpacity` | `number`  | `0.7`                     | Opacity for land polygons (0-1)                                |
-| `hexResolution`      | `number`  | `3`                       | H3 hexagon resolution for land (0-15, higher = more detail)    |
-| `hexMargin`          | `number`  | `0.7`                     | Margin between hexagons (0-1, higher = more spacing)           |
-| `hexUseDots`         | `boolean` | `false`                   | Use circular dots instead of hexagons for land                 |
-| `hexAltitude`        | `number`  | `0.0005`                  | Altitude of hexagons above globe surface                       |
-| `showAtmosphere`     | `boolean` | `true`                    | Whether to show atmospheric glow effect around globe           |
-| `atmosphereColor`    | `string`  | `"#3a228a"`               | Color of the atmosphere glow (hex string)                      |
-| `atmosphereAltitude` | `number`  | `0.25`                    | Size of atmosphere relative to globe radius (0-1)              |
-| `defaultArcColor`    | `string`  | `"#DD63AF"`               | Default color for arcs when not specified (hex string)         |
-| `defaultRingColor`   | `string`  | same as `defaultArcColor` | Default color for ripple rings when not specified (hex string) |
-| `ringMaxScale`       | `number`  | `3.5`                     | Maximum scale for ring expansion animation                     |
-| `ringExpansionSpeed` | `number`  | `0.08`                    | Speed of ring expansion (0-1, higher = faster)                 |
+- `globeRadius`: `number`, default `100`. Radius of the globe in Three.js units.
+- `globeColor`: `string`, default `"#3a228a"`. Main color of the globe surface.
+- `emissive`: `string`, default `"#220038"`. Emissive color for the globe material.
+- `emissiveIntensity`: `number`, default `0.1`. Intensity of the emissive color.
+- `shininess`: `number`, default `0.7`. Shininess of the globe surface material.
+- `showLandPolygons`: `boolean`, default `true`. Whether land masses render as hexagon patterns.
+- `landPolygonColor`: `string`, default `"rgba(255,255,255,0.7)"`. Color for land polygon hexagons.
+- `landPolygonOpacity`: `number`, default `0.7`. Opacity for land polygons.
+- `hexResolution`: `number`, default `3`. H3 hexagon resolution for land rendering.
+- `hexMargin`: `number`, default `0.7`. Margin between hexagons.
+- `hexUseDots`: `boolean`, default `false`. Use circular dots instead of hexagons for land.
+- `hexAltitude`: `number`, default `0.0005`. Altitude of hexagons above the globe surface.
+- `showAtmosphere`: `boolean`, default `true`. Whether to show the atmospheric glow effect.
+- `atmosphereColor`: `string`, default `"#3a228a"`. Color of the atmosphere glow.
+- `atmosphereAltitude`: `number`, default `0.25`. Size of the atmosphere relative to globe radius.
+- `defaultArcColor`: `string`, default `"#DD63AF"`. Default color for arcs.
+- `defaultRippleColor`: `string`, default same as `defaultArcColor`. Default color for ripples.
+- `rippleMaxScale`: `number`, default `3.5`. Maximum scale for ripple expansion.
+- `rippleExpansionSpeed`: `number`, default `0.08`. Speed of ripple expansion.
 
-### ArcOptions
+### GlobeEventOptions
 
-Configuration options for arc animations:
+Configuration options for core events. `GlobeEventOptions` is currently a union with a single member: `ArcEventOptions`.
 
 | Option              | Type                | Default        | Description                                                                   |
 | ------------------- | ------------------- | -------------- | ----------------------------------------------------------------------------- |
-| `startLat`          | `number`            | **required**   | Starting latitude in degrees (-90 to 90)                                      |
-| `startLng`          | `number`            | **required**   | Starting longitude in degrees (-180 to 180)                                   |
-| `endLat`            | `number`            | **required**   | Ending latitude in degrees (-90 to 90)                                        |
-| `endLng`            | `number`            | **required**   | Ending longitude in degrees (-180 to 180)                                     |
+| `event`             | `'arc'`             | **required**   | Event discriminator                                                           |
+| `lat`               | `number`            | **required**   | Origin latitude in degrees (-90 to 90)                                        |
+| `lng`               | `number`            | **required**   | Origin longitude in degrees (-180 to 180)                                     |
+| `endLat`            | `number`            | **required**   | Destination latitude in degrees (-90 to 90)                                   |
+| `endLng`            | `number`            | **required**   | Destination longitude in degrees (-180 to 180)                                |
 | `color`             | `string`            | `"#DD63AF"`    | Color of the arc as a hex string                                              |
 | `animationDuration` | `number`            | `2000`         | Duration of flight animation in milliseconds (ignored if arcVelocity is set)  |
 | `arcVelocity`       | `number`            | `0` (disabled) | Velocity in units per second - if set, duration is calculated from arc length |
 | `startDelay`        | `number`            | `0`            | Delay before animation starts in milliseconds                                 |
 | `endDelay`          | `number`            | `500`          | Delay before removing arc after animation completes (ms)                      |
 | `strokeWidth`       | `number`            | `0.4`          | Width of the arc stroke                                                       |
-| `showStartPoint`    | `boolean \| string` | `false`        | Show marker dot at start point (true/false or color hex string)               |
+| `showPoint`         | `boolean \| string` | `false`        | Show marker dot at the event origin (true/false or color hex string)          |
 | `showEndPoint`      | `boolean \| string` | `false`        | Show marker dot at end point (true/false or color hex string)                 |
 | `pointRadius`       | `number`            | `1.5`          | Radius of point markers in Three.js units                                     |
-| `showStartRing`     | `boolean \| string` | `false`        | Show ripple ring at start point (true/false or color hex string)              |
-| `showEndRing`       | `boolean \| string` | `true`         | Show ripple ring at end point (true/false or color hex string)                |
+| `showRipple`        | `boolean \| string` | `false`        | Show a ripple at the event origin (true/false or color hex string)            |
+| `showEndRipple`     | `boolean \| string` | `true`         | Show a ripple at the end point (true/false or color hex string)               |
 | `flyingSegment`     | `boolean`           | `true`         | Show moving segment along the arc path                                        |
 | `segmentLength`     | `number`            | `0.15`         | Length of flying segment as fraction of total arc (0.0-1.0)                   |
+
+### EventHandle
+
+The new primary API returns a handle instead of an ID.
+
+- `finished`: `Promise<GlobeEventResult<'arc'>>`. Resolves when the event has been removed.
+- `remove()`: `() => void`. Removes the event early.
+
+### EventResult
+
+`finished` resolves to a `GlobeEventResult<'arc'>`.
+
+| Property  | Type                       | Description                          |
+| --------- | -------------------------- | ------------------------------------ |
+| `event`   | `'arc'`                    | The event type                       |
+| `reason`  | `'completed' \| 'removed'` | How the event finished               |
+| `options` | `ArcEventOptions`          | The event options associated with it |
 
 ## API
 
 ### Methods
 
+#### `addEvent(options: GlobeEventOptions): EventHandle<'arc'>`
+
+Add an event and receive a handle for awaiting completion or removing it early.
+
+```ts
+const event = globe.addEvent({
+  event: 'arc',
+  lat: 40.7128,
+  lng: -74.0060,
+  endLat: 51.5074,
+  endLng: -0.1278,
+  color: '#DD63AF',
+  animationDuration: 2000,
+  showEndRipple: true,
+})
+
+async function waitForEvent() {
+  await event.finished
+}
+```
+
+#### `removeAllEvents(): void`
+
+Remove all active events from the globe.
+
+```ts
+globe.removeAllEvents()
+```
+
+#### Deprecated Arc API
+
+The old arc API is still available as a compatibility layer and still returns numeric IDs.
+
 #### `addArc(options: ArcOptions): number`
 
-Add an animated arc between two coordinates.
-
-**Returns:** Arc ID for use with `removeArcById()`
+Deprecated alias for `addEvent()`.
 
 ```ts
 const arcId = globe.addArc({
@@ -137,7 +189,7 @@ const arcId = globe.addArc({
 
 #### `removeArcById(id: number): void`
 
-Remove a specific arc by its ID.
+Deprecated ID-based removal for compatibility.
 
 ```ts
 globe.removeArcById(arcId)
@@ -145,7 +197,7 @@ globe.removeArcById(arcId)
 
 #### `clearAllArcs(): void`
 
-Remove all arcs from the globe.
+Deprecated alias for `removeAllEvents()`.
 
 ```ts
 globe.clearAllArcs()
@@ -153,7 +205,7 @@ globe.clearAllArcs()
 
 #### `getActiveArcCount(): number`
 
-Get the current number of active arcs.
+Deprecated method that returns the current number of active arcs. It will be removed in a future release.
 
 ```ts
 const count = globe.getActiveArcCount()
@@ -161,7 +213,7 @@ const count = globe.getActiveArcCount()
 
 #### `onArcRemoved(callback: (id: number, options: ArcOptions) => void): void`
 
-Set a callback to be invoked when an arc is removed (either manually or automatically after animation completes).
+Set a callback to be invoked when a deprecated arc is removed.
 
 ```ts
 globe.onArcRemoved((id, options) => {
@@ -246,35 +298,29 @@ function animate() {
 animate()
 ```
 
-### Dynamic Arc Management
+### Dynamic Event Management
 
 ```ts
-const activeArcs = new Map<number, NodeJS.Timeout>()
-
-// Add arc with auto-removal tracking
-function addTemporaryArc(startLat: number, startLng: number, endLat: number, endLng: number) {
-  const arcId = globe.addArc({
-    startLat,
-    startLng,
+// Add event and await removal
+async function addTemporaryEvent(lat: number, lng: number, endLat: number, endLng: number) {
+  const event = globe.addEvent({
+    event: 'arc',
+    lat,
+    lng,
     endLat,
     endLng,
     animationDuration: 2000,
     endDelay: 1000,
   })
 
-  // Remove after total duration
   const timeout = setTimeout(() => {
-    globe.removeArcById(arcId)
-    activeArcs.delete(arcId)
+    event.remove()
   }, 3000)
 
-  activeArcs.set(arcId, timeout)
+  const result = await event.finished
+  clearTimeout(timeout)
+  console.log(`Event ${result.reason}: ${result.options.lat},${result.options.lng} -> ${result.options.endLat},${result.options.endLng}`)
 }
-
-// Listen for arc removal
-globe.onArcRemoved((id, options) => {
-  console.log(`Arc completed: ${options.startLat},${options.startLng} → ${options.endLat},${options.endLng}`)
-})
 ```
 
 ## Higher-Level Packages
