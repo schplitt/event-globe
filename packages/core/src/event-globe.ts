@@ -675,6 +675,12 @@ export class EventGlobe extends Group {
     }
   }
 
+  #withDefinedOptions<T extends object>(options: T): Partial<T> {
+    return Object.fromEntries(
+      Object.entries(options).filter(([, value]) => value !== undefined),
+    ) as Partial<T>
+  }
+
   /**
    * Remove and finalize an active arc.
    *
@@ -704,7 +710,10 @@ export class EventGlobe extends Group {
    */
   #addArcEvent(options: ArcEventOptions): { id: number, handle: EventHandle<'arc'> } {
     const id = ++this.#arcIdCounter
-    const opts = { ...this.#defaultArcEventOptions, ...options }
+    const opts = {
+      ...this.#defaultArcEventOptions,
+      ...this.#withDefinedOptions(options),
+    }
 
     const color = opts.color ?? this.#config.defaultArcColor
     const altitude = 0.3
