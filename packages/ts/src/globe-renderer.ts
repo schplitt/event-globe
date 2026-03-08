@@ -9,9 +9,10 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { EventGlobe } from '@event-globe/core'
 import type {
   ArcOptions,
+  GlobeEvents,
   GlobeEventLifecycle,
   GlobeConfig,
-  GlobeEventOptions,
+  GlobeEventOptionsMap,
 } from '@event-globe/core'
 
 /**
@@ -256,11 +257,15 @@ export class EventGlobeRenderer {
   /**
    * Add an event to the globe
    *
+   * @param event Event type
    * @param options Event configuration options
    * @returns Event lifecycle for removal and early removal
    */
-  public addEvent(options: GlobeEventOptions): GlobeEventLifecycle<'arc'> {
-    return this.globe.addEvent(options)
+  public addEvent<TGlobeEvent extends GlobeEvents>(
+    event: TGlobeEvent,
+    options: GlobeEventOptionsMap[TGlobeEvent],
+  ): GlobeEventLifecycle<TGlobeEvent> {
+    return this.globe.addEvent(event, options)
   }
 
   /**

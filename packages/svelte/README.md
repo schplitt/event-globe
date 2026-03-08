@@ -26,8 +26,7 @@ npm install @event-globe/svelte
   }
 
   function addRandomEvent() {
-    globe?.addEvent({
-      event: 'arc',
+    globe?.addEvent('arc', {
       lat: (Math.random() * 180) - 90,
       lng: (Math.random() * 360) - 180,
       endLat: (Math.random() * 180) - 90,
@@ -74,8 +73,7 @@ Bind to the component to access these methods:
   let globe
 
   // Access methods
-  globe?.addEvent({
-    event: 'arc',
+  globe?.addEvent('arc', {
     lat: 40.7128,
     lng: -74.0060,
     endLat: 51.5074,
@@ -87,7 +85,7 @@ Bind to the component to access these methods:
 <EventGlobe bind:this={globe} />
 ```
 
-#### `addEvent(options: GlobeEventOptions): GlobeEventLifecycle<'arc'> | undefined`
+#### `addEvent<TGlobeEvent extends GlobeEvents>(event: TGlobeEvent, options: GlobeEventOptionsMap[TGlobeEvent]): GlobeEventLifecycle<TGlobeEvent> | undefined`
 
 Add an event and receive a lifecycle for awaiting removal or removing it early.
 

@@ -4,19 +4,18 @@ import { onMounted, onUnmounted, useTemplateRef } from 'vue'
 import EventGlobe from '@event-globe/vue'
 
 const globeRef = useTemplateRef("globeRef")
-let interval: number | null = null
+let arcInterval: number | null = null
+let rippleInterval: number | null = null
 
 onMounted(() => {
-  // set interval to add events every 2 seconds
-  interval = setInterval(() => {
+  arcInterval = setInterval(() => {
     const lat = (Math.random() * 180) - 90
     const lng = (Math.random() * 360) - 180
     const endLat = (Math.random() * 180) - 90
     const endLng = (Math.random() * 360) - 180
     const color = `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`
 
-    const event = globeRef.value?.addEvent({
-      event: 'arc',
+    const event = globeRef.value?.addEvent('arc', {
       lat,
       lng,
       endLat,
@@ -37,13 +36,36 @@ onMounted(() => {
     console.log('Added random event:', { lat, lng, endLat, endLng, color })
   }, 2000)
 
+  rippleInterval = setInterval(() => {
+    const lat = (Math.random() * 180) - 90
+    const lng = (Math.random() * 360) - 180
+    const color = `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`
+
+    const ripple = globeRef.value?.addEvent('ripple', {
+      lat,
+      lng,
+      color,
+    })
+
+    ripple?.removed.then((result) => {
+      console.log('Ripple removed:', {
+        event: ripple.event,
+        reason: result.reason,
+        options: result.options,
+      })
+    })
+
+    console.log('Added random ripple:', { lat, lng, color })
+  }, 50)
+
   console.log('EventGlobe Renderer initialized')
 })
 
 onUnmounted(() => {
-  if (interval) {
-    clearInterval(interval)
-  }
+  if (arcInterval)
+    clearInterval(arcInterval)
+  if (rippleInterval)
+    clearInterval(rippleInterval)
 })
 </script>
 

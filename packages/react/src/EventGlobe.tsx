@@ -1,6 +1,6 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef } from 'react'
 import { EventGlobeRenderer } from '@event-globe/ts'
-import type { EventGlobeRendererConfig, ArcOptions, GlobeEventLifecycle, GlobeEventOptions } from '@event-globe/ts'
+import type { EventGlobeRendererConfig, ArcOptions, GlobeEvents, GlobeEventLifecycle, GlobeEventOptionsMap } from '@event-globe/ts'
 import type { CSSProperties } from 'react'
 
 interface EventGlobeProps {
@@ -11,7 +11,7 @@ interface EventGlobeProps {
 }
 
 export interface EventGlobeRef {
-  addEvent: (options: GlobeEventOptions) => GlobeEventLifecycle<'arc'> | undefined
+  addEvent: <TGlobeEvent extends GlobeEvents>(event: TGlobeEvent, options: GlobeEventOptionsMap[TGlobeEvent]) => GlobeEventLifecycle<TGlobeEvent> | undefined
   addArc: (options: ArcOptions) => number
   getActiveArcCount: () => number
   removeArcById: (id: number) => void
@@ -55,8 +55,8 @@ export const EventGlobe = forwardRef<EventGlobeRef, EventGlobeProps>(
     }, [config])
 
     useImperativeHandle(ref, () => ({
-      addEvent: (options: GlobeEventOptions) => {
-        return rendererRef.current?.addEvent(options)
+      addEvent: (event, options) => {
+        return rendererRef.current?.addEvent(event, options)
       },
       addArc: (options: ArcOptions) => {
         return rendererRef.current?.addArc(options) ?? -1

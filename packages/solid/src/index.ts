@@ -4,8 +4,12 @@ export type { EventGlobeRef } from './EventGlobe'
 
 export type {
   EventGlobeRendererConfig,
+  GlobeEventType,
+  GlobeEventOptionsMap,
+  GlobeEvents,
   GlobeEventOptions,
   ArcEventOptions,
+  RippleEventOptions,
   GlobeEventResult,
   GlobeEventLifecycle,
   ArcOptions,

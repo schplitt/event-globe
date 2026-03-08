@@ -43,8 +43,7 @@ const globe = new EventGlobe(config)
 scene.add(globe)
 
 // Add an event
-const event = globe.addEvent({
-  event: 'arc',
+const event = globe.addEvent('arc', {
   lat: 40.7128,
   lng: -74.0060,
   endLat: 51.5074,
@@ -94,11 +93,12 @@ Configuration options for the globe appearance and behavior:
 
 ### GlobeEventOptions
 
-Configuration options for core events. `GlobeEventOptions` is currently a union with a single member: `ArcEventOptions`.
+Configuration options for core events. `addEvent()` takes the event type as its first argument and an event-specific options object as its second argument.
+
+### ArcEventOptions
 
 | Option              | Type                | Default        | Description                                                                   |
 | ------------------- | ------------------- | -------------- | ----------------------------------------------------------------------------- |
-| `event`             | `'arc'`             | **required**   | Event discriminator                                                           |
 | `lat`               | `number`            | **required**   | Origin latitude in degrees (-90 to 90)                                        |
 | `lng`               | `number`            | **required**   | Origin longitude in degrees (-180 to 180)                                     |
 | `endLat`            | `number`            | **required**   | Destination latitude in degrees (-90 to 90)                                   |
@@ -117,34 +117,42 @@ Configuration options for core events. `GlobeEventOptions` is currently a union 
 | `flyingSegment`     | `boolean`           | `true`         | Show moving segment along the arc path                                        |
 | `segmentLength`     | `number`            | `0.15`         | Length of flying segment as fraction of total arc (0.0-1.0)                   |
 
+### RippleEventOptions
+
+| Option       | Type     | Default      | Description                                    |
+| ------------ | -------- | ------------ | ---------------------------------------------- |
+| `lat`        | `number` | **required** | Ripple latitude in degrees (-90 to 90)         |
+| `lng`        | `number` | **required** | Ripple longitude in degrees (-180 to 180)      |
+| `color`      | `string` | `"#DD63AF"`  | Ripple color as a hex string                   |
+| `startDelay` | `number` | `0`          | Delay before the ripple starts in milliseconds |
+
 ### GlobeEventLifecycle
 
 The new primary API returns a lifecycle object instead of an ID.
 
-- `event`: `'arc'`. The event type for this lifecycle.
-- `removed`: `Promise<GlobeEventResult<'arc'>>`. Resolves when the event has been removed.
+- `event`: `'arc' | 'ripple'`. The event type for this lifecycle.
+- `removed`: `Promise<GlobeEventResult<TGlobeEvent>>`. Resolves when the event has been removed.
 - `remove()`: `() => void`. Removes the event early.
 
 ### EventResult
 
-`removed` resolves to a `GlobeEventResult<'arc'>`.
+`removed` resolves to a `GlobeEventResult<TGlobeEvent>`.
 
 | Property  | Type                       | Description                          |
 | --------- | -------------------------- | ------------------------------------ |
 | `reason`  | `'completed' \| 'removed'` | Why the event was removed            |
-| `options` | `ArcEventOptions`          | The event options associated with it |
+| `options` | Event-specific options     | The event options associated with it |
 
 ## API
 
 ### Methods
 
-#### `addEvent(options: GlobeEventOptions): GlobeEventLifecycle<'arc'>`
+#### `addEvent<TGlobeEvent extends GlobeEvents>(event: TGlobeEvent, options: GlobeEventOptionsMap[TGlobeEvent]): GlobeEventLifecycle<TGlobeEvent>`
 
 Add an event and receive a lifecycle for awaiting removal or removing it early.
 
 ```ts
-const event = globe.addEvent({
-  event: 'arc',
+const event = globe.addEvent('arc', {
   lat: 40.7128,
   lng: -74.0060,
   endLat: 51.5074,
@@ -157,6 +165,16 @@ const event = globe.addEvent({
 async function waitForEvent() {
   await event.removed
 }
+```
+
+Standalone ripple:
+
+```ts
+const ripple = globe.addEvent('ripple', {
+  lat: 40.7128,
+  lng: -74.0060,
+  color: '#DD63AF',
+})
 ```
 
 #### `removeAllEvents(): void`
@@ -303,8 +321,7 @@ animate()
 ```ts
 // Add event and await removal
 async function addTemporaryEvent(lat: number, lng: number, endLat: number, endLng: number) {
-  const event = globe.addEvent({
-    event: 'arc',
+  const event = globe.addEvent('arc', {
     lat,
     lng,
     endLat,

@@ -2,8 +2,12 @@ import EventGlobe from './EventGlobe.svelte'
 
 export type {
   EventGlobeRendererConfig,
+  GlobeEventType,
+  GlobeEventOptionsMap,
+  GlobeEvents,
   GlobeEventOptions,
   ArcEventOptions,
+  RippleEventOptions,
   GlobeEventResult,
   GlobeEventLifecycle,
   ArcOptions,
