@@ -26,7 +26,7 @@ function App() {
         showEndRipple: true,
       })
 
-      void event?.finished.then((result) => {
+      event?.finished.then((result) => {
         console.log('Event finished:', result)
       })
 
