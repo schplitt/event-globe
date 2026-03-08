@@ -25,14 +25,15 @@ npm install @event-globe/svelte
     }
   }
 
-  function addRandomArc() {
-    globe?.addArc({
-      startLat: (Math.random() * 180) - 90,
-      startLng: (Math.random() * 360) - 180,
+  function addRandomEvent() {
+    globe?.addEvent({
+      event: 'arc',
+      lat: (Math.random() * 180) - 90,
+      lng: (Math.random() * 360) - 180,
       endLat: (Math.random() * 180) - 90,
       endLng: (Math.random() * 360) - 180,
       color: '#DD63AF',
-      showEndRing: true,
+      showEndRipple: true,
     })
   }
 
@@ -43,7 +44,7 @@ npm install @event-globe/svelte
 
 <div class="globe-container">
   <EventGlobe bind:this={globe} {config} onarcremoved={handleArcRemoved} />
-  <button on:click={addRandomArc}>Add Arc</button>
+  <button on:click={addRandomEvent}>Add Event</button>
 </div>
 
 <style>
@@ -73,20 +74,34 @@ Bind to the component to access these methods:
   let globe
 
   // Access methods
-  globe?.addArc({ ... })
+  globe?.addEvent({
+    event: 'arc',
+    lat: 40.7128,
+    lng: -74.0060,
+    endLat: 51.5074,
+    endLng: -0.1278,
+  })
   globe?.getActiveArcCount()
 </script>
 
 <EventGlobe bind:this={globe} />
 ```
 
+#### `addEvent(options: GlobeEventOptions): GlobeEventLifecycle<'arc'> | undefined`
+
+Add an event and receive a lifecycle for awaiting removal or removing it early.
+
+#### `removeAllEvents(): void`
+
+Remove all active events from the globe.
+
 #### `addArc(options: ArcOptions): number`
 
-Add an animated arc between two coordinates. Returns the arc ID.
+Deprecated alias for `addEvent()`.
 
 #### `getActiveArcCount(): number`
 
-Get the current number of active arcs.
+Deprecated method that returns the current number of active arcs. It will be removed in a future release.
 
 #### `removeArcById(id: number): void`
 
@@ -94,7 +109,7 @@ Remove a specific arc by its ID.
 
 #### `clearAllArcs(): void`
 
-Remove all arcs from the globe.
+Deprecated alias for `removeAllEvents()`.
 
 ## Full API Reference
 

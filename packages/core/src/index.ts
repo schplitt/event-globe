@@ -3,5 +3,15 @@ export { GlowMesh } from './GlowMesh'
 
 export type {
   GlobeConfig,
-  ArcOptions,
 } from './event-globe'
+
+export type {
+  GlobeEventType,
+  GlobeEventOptionsMap,
+  GlobeEvents,
+  GlobeEventOptions,
+  ArcEventOptions,
+  GlobeEventResult,
+  GlobeEventLifecycle,
+  ArcOptions,
+} from './types'

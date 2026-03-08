@@ -7,7 +7,12 @@ import {
 } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { EventGlobe } from '@event-globe/core'
-import type { ArcOptions, GlobeConfig } from '@event-globe/core'
+import type {
+  ArcOptions,
+  GlobeEventLifecycle,
+  GlobeConfig,
+  GlobeEventOptions,
+} from '@event-globe/core'
 
 /**
  * Configuration options for the EventGlobeRenderer
@@ -249,10 +254,21 @@ export class EventGlobeRenderer {
   // ============ PUBLIC API ============
 
   /**
+   * Add an event to the globe
+   *
+   * @param options Event configuration options
+   * @returns Event lifecycle for removal and early removal
+   */
+  public addEvent(options: GlobeEventOptions): GlobeEventLifecycle<'arc'> {
+    return this.globe.addEvent(options)
+  }
+
+  /**
    * Add an arc animation to the globe
    *
    * @param options Arc configuration options
    * @returns Arc ID for reference
+   * @deprecated Use addEvent() instead.
    */
   public addArc(options: ArcOptions): number {
     return this.globe.addArc(options)
@@ -268,7 +284,16 @@ export class EventGlobeRenderer {
   }
 
   /**
+   * Clear all active events
+   */
+  public removeAllEvents(): void {
+    this.globe.removeAllEvents()
+  }
+
+  /**
    * Clear all arcs
+   *
+   * @deprecated Use removeAllEvents() instead.
    */
   public clearAllArcs(): void {
     this.globe.clearAllArcs()
@@ -276,6 +301,8 @@ export class EventGlobeRenderer {
 
   /**
    * Get count of active arcs
+   *
+   * @deprecated This method will be removed in a future release.
    */
   public getActiveArcCount(): number {
     return this.globe.getActiveArcCount()

@@ -26,14 +26,15 @@ const config = {
   }
 }
 
-function addRandomArc() {
-  globeRef.value?.addArc({
-    startLat: (Math.random() * 180) - 90,
-    startLng: (Math.random() * 360) - 180,
+function addRandomEvent() {
+  globeRef.value?.addEvent({
+    event: 'arc',
+    lat: (Math.random() * 180) - 90,
+    lng: (Math.random() * 360) - 180,
     endLat: (Math.random() * 180) - 90,
     endLng: (Math.random() * 360) - 180,
     color: '#DD63AF',
-    showEndRing: true,
+    showEndRipple: true,
   })
 }
 </script>
@@ -41,7 +42,7 @@ function addRandomArc() {
 <template>
   <div class="globe-container">
     <EventGlobe ref="globeRef" :config="config" />
-    <button @click="addRandomArc">Add Arc</button>
+    <button @click="addRandomEvent">Add Event</button>
   </div>
 </template>
 
@@ -72,18 +73,32 @@ Access these methods via a ref:
 const globeRef = useTemplateRef()
 
 // Access methods
-globeRef.value?.addArc({ ... })
+globeRef.value?.addEvent({
+  event: 'arc',
+  lat: 40.7128,
+  lng: -74.0060,
+  endLat: 51.5074,
+  endLng: -0.1278,
+})
 globeRef.value?.getActiveArcCount()
 </script>
 ```
 
+#### `addEvent(options: GlobeEventOptions): GlobeEventLifecycle<'arc'> | undefined`
+
+Add an event and receive a lifecycle for awaiting removal or removing it early.
+
+#### `removeAllEvents(): void`
+
+Remove all active events from the globe.
+
 #### `addArc(options: ArcOptions): number`
 
-Add an animated arc between two coordinates. Returns the arc ID.
+Deprecated alias for `addEvent()`.
 
 #### `getActiveArcCount(): number`
 
-Get the current number of active arcs.
+Deprecated method that returns the current number of active arcs. It will be removed in a future release.
 
 #### `removeArcById(id: number): void`
 
@@ -91,7 +106,7 @@ Remove a specific arc by its ID.
 
 #### `clearAllArcs(): void`
 
-Remove all arcs from the globe.
+Deprecated alias for `removeAllEvents()`.
 
 ## Full API Reference
 

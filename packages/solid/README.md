@@ -26,21 +26,22 @@ export default function App() {
     },
   }
 
-  function addRandomArc() {
-    globeRef?.addArc({
-      startLat: (Math.random() * 180) - 90,
-      startLng: (Math.random() * 360) - 180,
+  function addRandomEvent() {
+    globeRef?.addEvent({
+      event: 'arc',
+      lat: (Math.random() * 180) - 90,
+      lng: (Math.random() * 360) - 180,
       endLat: (Math.random() * 180) - 90,
       endLng: (Math.random() * 360) - 180,
       color: '#DD63AF',
-      showEndRing: true,
+      showEndRipple: true,
     })
   }
 
   return (
     <div class="globe-container" style={{ width: '100%', height: '600px' }}>
       <EventGlobe ref={globeRef} config={config} />
-      <button onClick={addRandomArc}>Add Arc</button>
+      <button onClick={addRandomEvent}>Add Event</button>
     </div>
   )
 }
@@ -64,11 +65,17 @@ Access these methods via the ref callback:
 import { EventGlobe } from '@event-globe/solid'
 
 export default function App() {
-  let globeRef!: EventGlobe
+  let globeRef!: EventGlobeRef
 
   // Access methods
-  const handleAddArc = () => {
-    globeRef?.addArc({ /* ... */ })
+  const handleAddEvent = () => {
+    globeRef?.addEvent({
+      event: 'arc',
+      lat: 40.7128,
+      lng: -74.0060,
+      endLat: 51.5074,
+      endLng: -0.1278,
+    })
   }
 
   const count = () => globeRef?.getActiveArcCount() ?? 0
@@ -77,13 +84,21 @@ export default function App() {
 }
 ```
 
+#### `addEvent(options: GlobeEventOptions): GlobeEventLifecycle<'arc'> | undefined`
+
+Add an event and receive a lifecycle for awaiting removal or removing it early.
+
+#### `removeAllEvents(): void`
+
+Remove all active events from the globe.
+
 #### `addArc(options: ArcOptions): number`
 
-Add an animated arc between two coordinates. Returns the arc ID.
+Deprecated alias for `addEvent()`.
 
 #### `getActiveArcCount(): number`
 
-Get the current number of active arcs.
+Deprecated method that returns the current number of active arcs. It will be removed in a future release.
 
 #### `removeArcById(id: number): void`
 
@@ -91,7 +106,7 @@ Remove a specific arc by its ID.
 
 #### `clearAllArcs(): void`
 
-Remove all arcs from the globe.
+Deprecated alias for `removeAllEvents()`.
 
 ## Full API Reference
 
