@@ -27,8 +27,7 @@ export default function App() {
   }
 
   function addRandomEvent() {
-    globeRef?.addEvent({
-      event: 'arc',
+    globeRef?.addEvent('arc', {
       lat: (Math.random() * 180) - 90,
       lng: (Math.random() * 360) - 180,
       endLat: (Math.random() * 180) - 90,
@@ -69,8 +68,7 @@ export default function App() {
 
   // Access methods
   const handleAddEvent = () => {
-    globeRef?.addEvent({
-      event: 'arc',
+    globeRef?.addEvent('arc', {
       lat: 40.7128,
       lng: -74.0060,
       endLat: 51.5074,
@@ -84,7 +82,7 @@ export default function App() {
 }
 ```
 
-#### `addEvent(options: GlobeEventOptions): GlobeEventLifecycle<'arc'> | undefined`
+#### `addEvent<TGlobeEvent extends GlobeEvents>(event: TGlobeEvent, options: GlobeEventOptionsMap[TGlobeEvent]): GlobeEventLifecycle<TGlobeEvent> | undefined`
 
 Add an event and receive a lifecycle for awaiting removal or removing it early.
 

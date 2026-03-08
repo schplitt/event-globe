@@ -6,6 +6,7 @@ export type {
   GlobeEvents,
   GlobeEventOptions,
   ArcEventOptions,
+  RippleEventOptions,
   GlobeEventResult,
   GlobeEventLifecycle,
   ArcOptions,

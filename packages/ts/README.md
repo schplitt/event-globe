@@ -27,8 +27,7 @@ const config: EventGlobeRendererConfig = {
 const renderer = new EventGlobeRenderer(container, config)
 
 function addRandomEvent() {
-  renderer.addEvent({
-    event: 'arc',
+  renderer.addEvent('arc', {
     lat: (Math.random() * 180) - 90,
     lng: (Math.random() * 360) - 180,
     endLat: (Math.random() * 180) - 90,
@@ -63,7 +62,7 @@ For complete API documentation and configuration options, see the [@event-globe/
 
 ### Methods
 
-#### `addEvent(options: GlobeEventOptions): GlobeEventLifecycle<'arc'>`
+#### `addEvent<TGlobeEvent extends GlobeEvents>(event: TGlobeEvent, options: GlobeEventOptionsMap[TGlobeEvent]): GlobeEventLifecycle<TGlobeEvent>`
 
 Add an event and receive a lifecycle for awaiting removal or removing it early.
 

@@ -1,11 +1,11 @@
-export type GlobeEventType = 'arc'
+export type GlobeEventType = 'arc' | 'ripple'
 
 export interface GlobeEventOptionsMap extends Record<GlobeEventType, object> {
   arc: ArcEventOptions
+  ripple: RippleEventOptions
 }
 
 export interface ArcEventOptions {
-  event: 'arc'
   lat: number
   lng: number
   endLat: number
@@ -23,6 +23,13 @@ export interface ArcEventOptions {
   showEndRipple?: boolean | string
   flyingSegment?: boolean
   segmentLength?: number
+}
+
+export interface RippleEventOptions {
+  lat: number
+  lng: number
+  color?: string
+  startDelay?: number
 }
 
 export type GlobeEvents = keyof GlobeEventOptionsMap

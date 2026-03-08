@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { EventGlobeRenderer } from '@event-globe/ts'
-import type { EventGlobeRendererConfig, ArcOptions, GlobeEventLifecycle, GlobeEventOptions } from '@event-globe/ts'
+import type { EventGlobeRendererConfig, ArcOptions, GlobeEvents, GlobeEventLifecycle, GlobeEventOptionsMap } from '@event-globe/ts'
 
 interface Props {
   config?: EventGlobeRendererConfig
@@ -36,8 +36,11 @@ function addArc(options: ArcOptions): number | undefined {
   return renderer?.addArc(options)
 }
 
-function addEvent(options: GlobeEventOptions): GlobeEventLifecycle<'arc'> | undefined {
-  return renderer?.addEvent(options)
+function addEvent<TGlobeEvent extends GlobeEvents>(
+  event: TGlobeEvent,
+  options: GlobeEventOptionsMap[TGlobeEvent],
+): GlobeEventLifecycle<TGlobeEvent> | undefined {
+  return renderer?.addEvent(event, options)
 }
 
 function getActiveArcCount(): number {

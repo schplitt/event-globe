@@ -3,7 +3,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte'
   import { EventGlobeRenderer } from '@event-globe/ts'
-  import type { EventGlobeRendererConfig, ArcOptions, GlobeEventLifecycle, GlobeEventOptions } from '@event-globe/ts'
+  import type { EventGlobeRendererConfig, ArcOptions, GlobeEvents, GlobeEventLifecycle, GlobeEventOptionsMap } from '@event-globe/ts'
 
   interface Props {
     config: EventGlobeRendererConfig | undefined
@@ -37,8 +37,11 @@
     }
   })
 
-  export function addEvent(options: GlobeEventOptions): GlobeEventLifecycle<'arc'> | undefined {
-    return renderer?.addEvent(options)
+  export function addEvent<TGlobeEvent extends GlobeEvents>(
+    event: TGlobeEvent,
+    options: GlobeEventOptionsMap[TGlobeEvent],
+  ): GlobeEventLifecycle<TGlobeEvent> | undefined {
+    return renderer?.addEvent(event, options)
   }
 
   export function addArc(options: ArcOptions): number {

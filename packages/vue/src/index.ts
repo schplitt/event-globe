@@ -2,8 +2,12 @@ import EventGlobe from './EventGlobe.vue'
 
 export type {
   EventGlobeRendererConfig,
+  GlobeEventType,
+  GlobeEventOptionsMap,
+  GlobeEvents,
   GlobeEventOptions,
   ArcEventOptions,
+  RippleEventOptions,
   GlobeEventResult,
   GlobeEventLifecycle,
   ArcOptions,

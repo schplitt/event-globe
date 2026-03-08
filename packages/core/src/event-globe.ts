@@ -27,9 +27,11 @@ import { GlowMesh } from './GlowMesh'
 import type {
   ArcEventOptions,
   ArcOptions,
+  GlobeEvents,
   GlobeEventLifecycle,
-  GlobeEventOptions,
+  GlobeEventOptionsMap,
   GlobeEventResult,
+  RippleEventOptions,
 } from './types'
 
 /**
@@ -190,6 +192,16 @@ interface ActiveArc {
   resolveRemoved: (result: GlobeEventResult<'arc'>) => void
 }
 
+interface ActiveRipple {
+  id: number
+  options: RippleEventOptions
+  mesh: Mesh
+  startTime: number
+  startDelay: number
+  phase: 'waiting' | 'animating'
+  resolveRemoved: (result: GlobeEventResult<'ripple'>) => void
+}
+
 /**
  * EventGlobe - A 3D globe visualization that extends THREE.Group
  *
@@ -205,8 +217,7 @@ interface ActiveArc {
  * globe.update();
  *
  * // Add an event
- * globe.addEvent({
- *   event: 'arc',
+ * globe.addEvent('arc', {
  *   lat: 40.7128, lng: -74.0060,
  *   endLat: 51.5074, endLng: -0.1278,
  * });
@@ -243,7 +254,6 @@ export class EventGlobe extends Group {
   }
 
   readonly #defaultArcEventOptions: Required<ArcEventOptions> = {
-    event: 'arc',
     lat: 0,
     lng: 0,
     endLat: 0,
@@ -263,9 +273,17 @@ export class EventGlobe extends Group {
     segmentLength: 0.15,
   }
 
+  readonly #defaultRippleEventOptions: Required<RippleEventOptions> = {
+    lat: 0,
+    lng: 0,
+    color: '#DD63AF',
+    startDelay: 0,
+  }
+
   #config: NormalizedGlobeConfig = { ...this.#defaultConfig }
   #activeArcs: Map<number, ActiveArc> = new Map()
-  #arcIdCounter = 0
+  #activeRipples: Map<number, ActiveRipple> = new Map()
+  #eventIdCounter = 0
   #onArcRemovedCallback?: (id: number, options: ArcEventOptions) => void
 
   /**
@@ -316,10 +334,10 @@ export class EventGlobe extends Group {
   }
 
   /**
-   * Update arc animations and lifecycle
+   * Update event animations and lifecycle
    *
-   * Updates all active arc animations, ripples, and handles arc lifecycle transitions.
-   * Call this in your render loop to keep arcs animating.
+   * Updates all active arc and ripple animations and handles event lifecycle transitions.
+   * Call this in your render loop to keep events animating.
    *
    * @returns {void}
    */
@@ -403,18 +421,46 @@ export class EventGlobe extends Group {
 
       this.#updateEndRipple(arc)
     })
+
+    this.#activeRipples.forEach((ripple, id) => {
+      const elapsed = now - ripple.startTime
+
+      switch (ripple.phase) {
+        case 'waiting':
+          if (elapsed >= ripple.startDelay) {
+            ripple.phase = 'animating'
+            ripple.startTime = now
+            ripple.mesh.visible = true
+          }
+          break
+
+        case 'animating':
+          if (this.#updateRippleMesh(ripple.mesh)) {
+            this.#removeActiveRipple(id, 'completed')
+          }
+          break
+      }
+    })
   }
 
   /**
    * Add an event to the globe and receive a handle for completion and removal.
    *
-   * @param {GlobeEventOptions} options - Event configuration options
-   * @returns {GlobeEventLifecycle<'arc'>} - Lifecycle for awaiting removal or removing the event
+   * @param {TGlobeEvent} event - Event type
+   * @param {GlobeEventOptionsMap[TGlobeEvent]} options - Event configuration options
+   * @returns {GlobeEventLifecycle<TGlobeEvent>} - Lifecycle for awaiting removal or removing the event
    */
-  public addEvent(options: GlobeEventOptions): GlobeEventLifecycle<'arc'> {
-    switch (options.event) {
+  public addEvent<TGlobeEvent extends GlobeEvents>(
+    event: TGlobeEvent,
+    options: GlobeEventOptionsMap[TGlobeEvent],
+  ): GlobeEventLifecycle<TGlobeEvent> {
+    switch (event) {
       case 'arc':
-        return this.#addArcEvent(options).lifecycle
+        return this.#addArcEvent(options as ArcEventOptions).lifecycle as GlobeEventLifecycle<TGlobeEvent>
+      case 'ripple':
+        return this.#addRippleEvent(options as RippleEventOptions) as GlobeEventLifecycle<TGlobeEvent>
+      default:
+        throw new Error(`Unsupported event type: ${event satisfies never}`)
     }
   }
 
@@ -448,6 +494,9 @@ export class EventGlobe extends Group {
   public removeAllEvents(): void {
     const activeIds = [...this.#activeArcs.keys()]
     activeIds.forEach((id) => this.#removeActiveArc(id, 'removed'))
+
+    const activeRippleIds = [...this.#activeRipples.keys()]
+    activeRippleIds.forEach((id) => this.#removeActiveRipple(id, 'removed'))
   }
 
   /**
@@ -625,7 +674,6 @@ export class EventGlobe extends Group {
    */
   #arcOptionsToEventOptions(options: ArcOptions): ArcEventOptions {
     return {
-      event: 'arc',
       lat: options.startLat,
       lng: options.startLng,
       endLat: options.endLat,
@@ -711,13 +759,30 @@ export class EventGlobe extends Group {
   }
 
   /**
+   * Remove and finalize an active ripple event.
+   *
+   * @param {number} id - Internal ripple identifier.
+   * @param {'completed' | 'removed'} reason - Why the event was removed.
+   * @returns {void}
+   */
+  #removeActiveRipple(id: number, reason: 'completed' | 'removed'): void {
+    const ripple = this.#activeRipples.get(id)
+    if (!ripple)
+      return
+
+    this.#disposeRipple(ripple)
+    this.#activeRipples.delete(id)
+    ripple.resolveRemoved({ reason, options: ripple.options })
+  }
+
+  /**
    * Add a normalized arc event to the scene.
    *
    * @param {ArcEventOptions} options - Normalized arc event options.
    * @returns {{ id: number, lifecycle: GlobeEventLifecycle<'arc'> }} - Internal id and public event lifecycle.
    */
   #addArcEvent(options: ArcEventOptions): { id: number, lifecycle: GlobeEventLifecycle<'arc'> } {
-    const id = ++this.#arcIdCounter
+    const id = ++this.#eventIdCounter
     const opts = {
       ...this.#defaultArcEventOptions,
       ...this.#withDefinedOptions(options),
@@ -842,6 +907,50 @@ export class EventGlobe extends Group {
         remove: () => {
           this.#removeActiveArc(id, 'removed')
         },
+      },
+    }
+  }
+
+  /**
+   * Add a standalone ripple event to the scene.
+   *
+   * @param {RippleEventOptions} options - Ripple event options.
+   * @returns {GlobeEventLifecycle<'ripple'>} - Public lifecycle for the ripple event.
+   */
+  #addRippleEvent(options: RippleEventOptions): GlobeEventLifecycle<'ripple'> {
+    const id = ++this.#eventIdCounter
+    const opts = {
+      ...this.#defaultRippleEventOptions,
+      ...this.#withDefinedOptions(options),
+    }
+
+    const color = opts.color ?? this.#config.defaultRippleColor
+    const position = this.#latLngToVector3(opts.lat, opts.lng)
+    const mesh = this.#createRipple(position, color)
+    mesh.scale.set(0.05, 0.05, 1)
+    mesh.visible = opts.startDelay <= 0
+    this.#pointsGroup.add(mesh)
+
+    let resolveRemoved!: (result: GlobeEventResult<'ripple'>) => void
+    const removed = new Promise<GlobeEventResult<'ripple'>>((resolve) => {
+      resolveRemoved = resolve
+    })
+
+    this.#activeRipples.set(id, {
+      id,
+      options,
+      mesh,
+      startTime: Date.now(),
+      startDelay: opts.startDelay,
+      phase: opts.startDelay > 0 ? 'waiting' : 'animating',
+      resolveRemoved,
+    })
+
+    return {
+      event: 'ripple',
+      removed,
+      remove: () => {
+        this.#removeActiveRipple(id, 'removed')
       },
     }
   }
@@ -1148,19 +1257,8 @@ export class EventGlobe extends Group {
     if (!arc.startRipple)
       return
 
-    const rippleMat = arc.startRipple.material as MeshBasicMaterial
-
     if (arc.startRipplePhase === 'shrinking') {
-      const targetScale = this.#config.rippleMaxScale
-      const expansionSpeed = this.#config.rippleExpansionSpeed
-      const currentScale = arc.startRipple.scale.x
-      const newScale = currentScale + (targetScale - currentScale) * expansionSpeed
-      arc.startRipple.scale.set(newScale, newScale, 1)
-
-      const progress = (newScale - 0.05) / (targetScale - 0.05)
-      rippleMat.opacity = Math.max(0, 1 - progress)
-
-      if (rippleMat.opacity <= 0.05) {
+      if (this.#updateRippleMesh(arc.startRipple)) {
         arc.startRipplePhase = 'done'
         arc.startRipple.visible = false
         if (arc.startPoint)
@@ -1181,21 +1279,31 @@ export class EventGlobe extends Group {
     if (!arc.endRipple || !arc.endRipple.visible)
       return
 
-    const rippleMat = arc.endRipple.material as MeshBasicMaterial
+    if (this.#updateRippleMesh(arc.endRipple)) {
+      arc.endRipplePhase = 'done'
+      arc.endRipple.visible = false
+    }
+  }
 
+  /**
+   * Advance a ripple mesh animation by one frame.
+   *
+   * @param {Mesh} ripple - Ripple mesh to animate.
+   * @returns {boolean} - True when the ripple has finished animating.
+   */
+  #updateRippleMesh(ripple: Mesh): boolean {
+    const rippleMat = ripple.material as MeshBasicMaterial
     const targetScale = this.#config.rippleMaxScale
     const expansionSpeed = this.#config.rippleExpansionSpeed
-    const currentScale = arc.endRipple.scale.x
+    const currentScale = ripple.scale.x
     const newScale = currentScale + (targetScale - currentScale) * expansionSpeed
-    arc.endRipple.scale.set(newScale, newScale, 1)
+
+    ripple.scale.set(newScale, newScale, 1)
 
     const progress = (newScale - 0.05) / (targetScale - 0.05)
     rippleMat.opacity = Math.max(0, 1 - progress)
 
-    if (rippleMat.opacity <= 0.05) {
-      arc.endRipplePhase = 'done'
-      arc.endRipple.visible = false
-    }
+    return rippleMat.opacity <= 0.05
   }
 
   /**
@@ -1236,6 +1344,18 @@ export class EventGlobe extends Group {
       arc.endRipple.geometry.dispose();
       (arc.endRipple.material as MeshBasicMaterial).dispose()
     }
+  }
+
+  /**
+   * Dispose of a standalone ripple and its resources.
+   *
+   * @param {ripple} ripple - The ripple event to dispose.
+   * @returns {void}
+   */
+  #disposeRipple(ripple: ActiveRipple): void {
+    this.#pointsGroup.remove(ripple.mesh)
+    ripple.mesh.geometry.dispose();
+    (ripple.mesh.material as MeshBasicMaterial).dispose()
   }
 
   /**
